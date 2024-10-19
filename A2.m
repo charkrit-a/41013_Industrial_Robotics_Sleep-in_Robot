@@ -1,3 +1,7 @@
+clear
+clf
+clc
+
 Init();
 
 hold on
