@@ -6,5 +6,7 @@ function Init()
     addpath(genpath(scriptDir));
     
     % prepare robotics toolbox
-    startup_rvc
+    if exist('SerialLink','class') ~= 8
+        startup_rvc
+    end
 end

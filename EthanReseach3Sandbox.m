@@ -2,6 +2,8 @@ clear all;
 clf
 clc;
 
+Init();
+
 %Base Position of the Robot 
 X = 0;
 Y = 0;
