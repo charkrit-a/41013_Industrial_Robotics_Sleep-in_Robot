@@ -1,7 +1,6 @@
-classdef Robot < handle
+classdef EthanHelpers < handle
 
     methods (Static) 
-        
         %Function to generate set of q to and create the trajectory using jtraj
         function qTrajec = CreateTraj(robot,brickPosition,jointGuess)
 

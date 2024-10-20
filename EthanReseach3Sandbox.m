@@ -43,7 +43,7 @@ b8Z = 0;
 b9X = 0.534;
 b9Y = 0.353;
 b9Z = 0;
-%% Plot the LinearUR3e and the gripper
+%% Plot the Research 3 and the gripper
 
 % Call the LinearResearch3
 r = LinearResearch3 (transl(X,Y,Z));
@@ -59,7 +59,7 @@ finger1 = LinearFinger(base*trotx(pi/2));
 finger2 = LinearFinger(base*troty(pi)*trotx(-pi/2));
 
 %% Plot the environment
-%Robot.PlotSafetyEnvironment(X, Y, Z)
+%EthanHelpers.PlotSafetyEnvironment(X, Y, Z)
 
 %Plot the Kitchen table 
 t1 = PlaceObject('kitchenTable.ply',[-1, Y, X]);
@@ -137,7 +137,7 @@ brick9ArmPos = [b9X + X, b9Y + Y, b9Z + 0.15 + Z];
 brick9WallPos = [-1 + X, 0.1465 + Y, 0.213 + Z];
 
 %% Plot 9 bricks
-[b1, b2, b3, b4, b5, b6, b7, b8, b9] = Robot.PlotBrick(brick1, brick2, brick3, brick4, brick5, brick6, brick7, brick8, brick9);
+[b1, b2, b3, b4, b5, b6, b7, b8, b9] = EthanHelpers.PlotBrick(brick1, brick2, brick3, brick4, brick5, brick6, brick7, brick8, brick9);
 
 %% A set of joints guess for ikcon to reach the bricks
 
@@ -151,148 +151,148 @@ jointGuessEnd= deg2rad([0 180 60 30 0 -90 0]);
 jointGuess9 = deg2rad([0 0 -90 0 0 90 0]);
 
 %% Move to first brick
-qTraj = Robot.CreateTraj(r, brick1ArmPos, jointguess);
+qTraj = EthanHelpers.CreateTraj(r, brick1ArmPos, jointguess);
 
-Robot.MoveToBrick(r,qTraj,finger1,finger2);
+EthanHelpers.MoveToBrick(r,qTraj,finger1,finger2);
 
 %% Picking the 1st brick and move it 
 
-qTraj = Robot.CreateTraj(r, brick1WallPos,jointGuessEnd);
+qTraj = EthanHelpers.CreateTraj(r, brick1WallPos,jointGuessEnd);
 
 %Delete the initial brick
 try delete(b1); 
 catch ME
 end
 
-Robot.PlotPose(r,qTraj,5,finger1,finger2,brick1);
+EthanHelpers.PlotPose(r,qTraj,5,finger1,finger2,brick1);
 
 %% Move to 2nd brick position after dropping 1st brick
 
-qTraj = Robot.CreateTraj(r, brick2ArmPos, jointguess);
+qTraj = EthanHelpers.CreateTraj(r, brick2ArmPos, jointguess);
 
-Robot.MoveToBrick(r,qTraj,finger1,finger2);
+EthanHelpers.MoveToBrick(r,qTraj,finger1,finger2);
 
 %% Grasp 2nd brick
-qTraj = Robot.CreateTraj(r, brick2WallPos, jointGuessEnd);
+qTraj = EthanHelpers.CreateTraj(r, brick2WallPos, jointGuessEnd);
 
 %Delete the initial brick
 try delete(b2); 
 catch ME
 end
-Robot.PlotPose(r,qTraj,5,finger1,finger2,brick2);
+EthanHelpers.PlotPose(r,qTraj,5,finger1,finger2,brick2);
 
 %% Move to 3rd brick position after dropping 2nd brick
 
-qTraj = Robot.CreateTraj(r, brick3ArmPos, jointguess);
+qTraj = EthanHelpers.CreateTraj(r, brick3ArmPos, jointguess);
 
-Robot.MoveToBrick(r,qTraj,finger1,finger2);
+EthanHelpers.MoveToBrick(r,qTraj,finger1,finger2);
 
 
 %% Grasp 3rd brick and Move it
-qTraj = Robot.CreateTraj(r, brick3WallPos, jointGuessEnd);
+qTraj = EthanHelpers.CreateTraj(r, brick3WallPos, jointGuessEnd);
 
 %Delete the initial brick
 try delete(b3);
 catch ME
 end
-Robot.PlotPose(r,qTraj,5,finger1,finger2,brick3);
+EthanHelpers.PlotPose(r,qTraj,5,finger1,finger2,brick3);
 
 %% Move to 4th brick position after dropping 3rd brick
 
-qTraj = Robot.CreateTraj(r, brick4ArmPos, jointguess);
+qTraj = EthanHelpers.CreateTraj(r, brick4ArmPos, jointguess);
 
-Robot.MoveToBrick(r,qTraj,finger1,finger2);
+EthanHelpers.MoveToBrick(r,qTraj,finger1,finger2);
 
 %% Grasp 4th brick and move it
 
-qTraj = Robot.CreateTraj(r, brick4WallPos, jointGuessEnd);
+qTraj = EthanHelpers.CreateTraj(r, brick4WallPos, jointGuessEnd);
 
 %Delete the initial brick
 try delete(b4); 
 catch ME
 end
 
-Robot.PlotPose(r,qTraj,5,finger1,finger2,brick4);
+EthanHelpers.PlotPose(r,qTraj,5,finger1,finger2,brick4);
 %% Move to 5th brick position after dropping 4th brick
 
-qTraj = Robot.CreateTraj(r, brick5ArmPos, jointguess);
+qTraj = EthanHelpers.CreateTraj(r, brick5ArmPos, jointguess);
 
-Robot.MoveToBrick(r,qTraj,finger1,finger2);
+EthanHelpers.MoveToBrick(r,qTraj,finger1,finger2);
 %% Grasp 5th brick and move it 
 
-qTraj = Robot.CreateTraj(r, brick5WallPos, jointGuessEnd);
+qTraj = EthanHelpers.CreateTraj(r, brick5WallPos, jointGuessEnd);
 
 %Delete the initial brick
 try delete(b5); 
 catch ME
 end
 
-Robot.PlotPose(r,qTraj,5,finger1,finger2,brick5);
+EthanHelpers.PlotPose(r,qTraj,5,finger1,finger2,brick5);
 
 
 %% Move to 6th brick position after dropping 5th brick
 
-qTraj = Robot.CreateTraj(r, brick6ArmPos, jointguess);
+qTraj = EthanHelpers.CreateTraj(r, brick6ArmPos, jointguess);
 
-Robot.MoveToBrick(r,qTraj,finger1,finger2);
+EthanHelpers.MoveToBrick(r,qTraj,finger1,finger2);
 %% Grasp 6th brick and move it
 
-qTraj = Robot.CreateTraj(r, brick6WallPos, jointGuessEnd);
+qTraj = EthanHelpers.CreateTraj(r, brick6WallPos, jointGuessEnd);
 
 %Delete the initial brick
 try delete(b6);
 catch ME
 end
-Robot.PlotPose(r,qTraj,5,finger1,finger2,brick6);
+EthanHelpers.PlotPose(r,qTraj,5,finger1,finger2,brick6);
 %% Move to 7th brick position after dropping 6th brick
 
-qTraj = Robot.CreateTraj(r, brick7ArmPos, jointguess);
+qTraj = EthanHelpers.CreateTraj(r, brick7ArmPos, jointguess);
 
-Robot.MoveToBrick(r,qTraj,finger1,finger2);
+EthanHelpers.MoveToBrick(r,qTraj,finger1,finger2);
 
 %% Grasp 7th brick
 
-qTraj = Robot.CreateTraj(r, brick7WallPos, jointGuessEnd);
+qTraj = EthanHelpers.CreateTraj(r, brick7WallPos, jointGuessEnd);
 
 %Delete the initial brick
 try delete(b7); 
 catch ME
 end
-Robot.PlotPose(r,qTraj,5,finger1,finger2,brick7);
+EthanHelpers.PlotPose(r,qTraj,5,finger1,finger2,brick7);
 
 %% Move to 8th brick position after dropping 7th brick
 
-qTraj = Robot.CreateTraj(r, brick8ArmPos, jointguess);
+qTraj = EthanHelpers.CreateTraj(r, brick8ArmPos, jointguess);
 
-Robot.MoveToBrick(r,qTraj,finger1,finger2);
+EthanHelpers.MoveToBrick(r,qTraj,finger1,finger2);
 %% Grasp 8th brick
-qTraj = Robot.CreateTraj(r, brick8WallPos, jointGuessEnd);
+qTraj = EthanHelpers.CreateTraj(r, brick8WallPos, jointGuessEnd);
 
 %Delete the initial brick
 try delete(b8); 
 catch ME
 end
-Robot.PlotPose(r,qTraj,5,finger1,finger2,brick8);
+EthanHelpers.PlotPose(r,qTraj,5,finger1,finger2,brick8);
 
 %% Move to 9th brick position after dropping 8th brick
 
-qTraj = Robot.CreateTraj(r, brick9ArmPos, jointguess);
+qTraj = EthanHelpers.CreateTraj(r, brick9ArmPos, jointguess);
 
-Robot.MoveToBrick(r,qTraj,finger1,finger2);
+EthanHelpers.MoveToBrick(r,qTraj,finger1,finger2);
 
 %% Grasp 9th brick
 
-qTraj = Robot.CreateTraj(r, brick9WallPos, jointGuessEnd);
+qTraj = EthanHelpers.CreateTraj(r, brick9WallPos, jointGuessEnd);
 
 %Delete the initial brick
 try delete(b9);
 catch ME
 end
 
-Robot.PlotPose(r,qTraj,5,finger1,finger2,brick9);
+EthanHelpers.PlotPose(r,qTraj,5,finger1,finger2,brick9);
 
 %% Move back to starting position
 
-qTraj = Robot.CreateTraj(r, brick9ArmPos, jointguess);
+qTraj = EthanHelpers.CreateTraj(r, brick9ArmPos, jointguess);
 
-Robot.MoveToBrick(r,qTraj,finger1,finger2);
+EthanHelpers.MoveToBrick(r,qTraj,finger1,finger2);
