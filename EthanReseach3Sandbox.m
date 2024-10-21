@@ -5,13 +5,13 @@ clc;
 Init();
 
 %Base Position of the Robot 
-X = 0;
+X = -0.3;
 Y = 0;
 Z = 0;
 
-%Axis Size
-Xaxis = 2;
-Yaxis = 2;
+%Axis Size       
+XUpperAxis = 3;
+YLowerAxis = -3;
 ZUpperAxis = 2;
 ZLowerAxis = -0.57;
 
@@ -27,6 +27,7 @@ b2Z = 0;
 
 % Call the LinearResearch3
 r = LinearUR3e (transl(X,Y,Z));
+r2 = UR3(transl(0.5,0.2,0)*trotz(pi/2));
 hold on 
 
 % Take the base of end-effector 
@@ -39,30 +40,26 @@ finger1 = LinearFinger(base*trotx(pi/2));
 finger2 = LinearFinger(base*troty(pi)*trotx(-pi/2));
 
 %% Plot the environment
-EthanHelpers.PlotSafetyEnvironment(X, Y, Z, ZUpperAxis, ZLowerAxis)
+EthanHelpers.PlotSafetyEnvironment(X, Y, Z, XUpperAxis, YLowerAxis, ZUpperAxis, ZLowerAxis)
 
 %Plot the Kitchen table 
 
-%Plot the Computer table 
-%t2 = PlaceObject('computerTable.ply',[1, 0, 0.5]);
-%verts = [get(t2,'Vertices'), ones(size(get(t2,'Vertices'),1),1)]* trotz(pi/2);
-%verts(:,1) = verts(:,1)*0.0008;
-%verts(:,2) = verts(:,2)*0.0008;
-%verts(:,3) = verts(:,3)*0.0008;
-%set(t2,'Vertices',verts(:,1:3))
-%hold on;
 
-axis([-Xaxis+X Xaxis+X -Yaxis+Y Yaxis+Y ZLowerAxis ZUpperAxis+Z]);
-hold on
+
+
 %% Place the bricks 
-%brick{i} = [x y 0] %brick{i}arm = [x y z+0.15]
-brick1 = [10*(b1X + X)/0.008, 10*(b1Y + Y)/0.008, 10*(b1Z + Z)/0.008];
-brick1ArmPos = [10*(b1X + X)/0.008, 10*(b1Y + Y)/0.008, 10*(0.15 + Z)/0.008]; %z+0.15
-brick1WallPos = [10*(-1 + X)/0.008, 10*(-0.1465 + Y)/0.008, 10*(0.15 + Z)/0.008]; %-x and z+0.15
+XShelf = -1.5+X;
+XShelfOffset = -0.14;
+YShelf = 0;
 
-brick2 = [10*(b2X + X)/0.008, 10*(b2Y + Y)/0.008, 10*(b2Z + Z)/0.008];
-brick2ArmPos = [10*(b2X + X)/0.008, 10*(b2Y + Y)/0.008, 10*(b2Z+ 0.15 + Z)/0.008]; %z+0.15
-brick2WallPos = [10*(-1 + X)/0.008, 10*(0 + Y)/0.008, 10*(0.15 + Z)/0.008]; %-x and z+0.15
+%brick{i} = [x y 0] %brick{i}arm = [x y z+0.15]
+brick1 = [b1X + X, b1Y + Y, b1Z + Z];
+brick1ArmPos = [b1X + X, b1Y + Y, 0.15 + Z]; %z+0.15
+brick1WallPos = [-1 + X, -0.1465 + Y, 0.15 + Z]; %-x and z+0.15
+
+brick2 = [b2X + X, b2Y + Y, b1Z + Z];
+brick2ArmPos = [b2X + X, b2Y + Y, b2Z + 0.15 + Z];
+brick2WallPos = [-1 + X, 0 + Y, 0.15 + Z];
 
 
 %% Plot 9 bricks
