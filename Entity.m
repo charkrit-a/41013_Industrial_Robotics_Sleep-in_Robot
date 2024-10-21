@@ -1,4 +1,4 @@
-classdef Entity
+classdef Entity < handle
     %ENTITY Class to represent moveable objects
     %   Plots ply model, track and move its position
     
