@@ -1,9 +1,14 @@
-clear
-clf
-clc
+function A2(app)
+    clf
+    clc
+    
+    Init();
+    
+    hold on
+    
+    EnvironmentA2();
 
-Init();
-
-hold on
-
-EnvironmentA2();
+    while(1)
+        
+    end
+end
