@@ -70,7 +70,7 @@ classdef EthanHelpers < handle
             for i=1:size(qArray,1)
 
                 % Take the forward kinematic for the brick
-                brick = self.model.fkineUTS(qArray(i,:));
+                brick = self.model.fkineUTS(10*qArray(i,:)/0.008);
 
                 %BrickPose is the 4x4 matrix, transl(0,0,0.1) is move the brick down 0.1 in the Z direction
                 %to make it look like it is grasped by the gripper
@@ -178,149 +178,87 @@ classdef EthanHelpers < handle
         end
 
         %Plot the environment
-        function PlotSafetyEnvironment(X,Y,Z, ZUpperAxis, ZLowerAxis)
-            XShelf = 1.5;
+        function PlotSafetyEnvironment(X, Y, Z, XUpperAxis, YLowerAxis, ZUpperAxis, ZLowerAxis)
+            %Shelf Coordinates
+            XShelf = -1.5+X;
+            XShelfOffset = -0.14;
             YShelf = 0;
-            heightofFence = 0.4;
+            YWallOffset = 1.2;
+            YSignOffset = YWallOffset-0.01;
+            
+            %Remaining Axis length created
+            XLowerAxis = XShelf+XShelfOffset;
+            YUpperAxis = Y + YWallOffset;
+            
+            %Fence Dimensions
+            heightofFence = 0.5;
             lengthofFence = 0.8;
-            fenceOffset = 0.2;
+            fenceOffset = 0.4;
            
-            lengthOfBorderX = 3.2;
-            lengthOfBorderY = 3.2;
-            heightofBorderZ = 2;
-
-
-            f1 = PlaceObject('fenceFinal.ply',[X + 1, Y, ZLowerAxis]);
-            hold on;
-            f2 = PlaceObject('fenceFinal.ply',[X + 1, Y, ZLowerAxis + heightofFence]);
-            hold on;
-            f3 = PlaceObject('fenceFinal.ply',[X + 1, Y, ZLowerAxis + 2*heightofFence]);
-            hold on;
-
-            f4 = PlaceObject('fenceFinal.ply',[X + 1, Y - 0.8, ZLowerAxis]);
-            hold on;
-            f5 = PlaceObject('fenceFinal.ply',[X + 1, Y - 0.8, ZLowerAxis + heightofFence]);
-            hold on;
-            f6 = PlaceObject('fenceFinal.ply',[X + 1, Y - 0.8, ZLowerAxis + 2*heightofFence]);
-            hold on;
-
-            f7 = PlaceObject('fenceFinal.ply',[X + 1, Y + 0.8, ZLowerAxis]);
-            hold on;
-            f8 = PlaceObject('fenceFinal.ply',[X + 1, Y + 0.8, ZLowerAxis + heightofFence]);
-            hold on;
-            f9 = PlaceObject('fenceFinal.ply',[X + 1, Y + 0.8, ZLowerAxis + 2*heightofFence]);
-            hold on;
-
-            f10 = PlaceObject('fenceFinal.ply',[X - 1.4, Y, ZLowerAxis]);
-            hold on;
-            f11 = PlaceObject('fenceFinal.ply',[X - 1.4, Y, ZLowerAxis + heightofFence]);
-            hold on;
-            f12 = PlaceObject('fenceFinal.ply',[X - 1.4, Y, ZLowerAxis + 2*heightofFence]);
-            hold on;
+            lengthOfBorderX = 3.2; %Fence border along x-axis
+            lengthOfBorderY = 2.4; %Fence border along y-axis
             
-            f13 = PlaceObject('fenceFinal.ply',[X - 1.4, Y + 0.8, ZLowerAxis]);
-            hold on;
-            f14 = PlaceObject('fenceFinal.ply',[X - 1.4, Y + 0.8, ZLowerAxis + heightofFence]);
-            hold on;
-            f15 = PlaceObject('fenceFinal.ply',[X - 1.4, Y + 0.8, ZLowerAxis + 2*heightofFence]);
-            hold on;
-                        
-            f13 = PlaceObject('fenceFinal.ply',[X - 1.4, Y - 0.8, ZLowerAxis]);
-            hold on;
-            f14 = PlaceObject('fenceFinal.ply',[X - 1.4, Y - 0.8, ZLowerAxis + heightofFence]);
-            hold on;
-            f15 = PlaceObject('fenceFinal.ply',[X - 1.4, Y - 0.8, ZLowerAxis + 2*heightofFence]);
-            hold on;
-
-            %Plot the barrier and rotate it
-            f16 =PlaceObject('fenceFinal.ply',[1.2 - Y, X - 1, ZLowerAxis]);
-            verts = [get(f16,'Vertices'), ones(size(get(f16,'Vertices'),1),1)] * trotz(pi/2);
-            set(f16,'Vertices',verts(:,1:3))
-            hold on;
-            f17 =PlaceObject('fenceFinal.ply',[1.2 - Y, X - 1, ZLowerAxis + heightofFence]);
-            verts = [get(f17,'Vertices'), ones(size(get(f17,'Vertices'),1),1)] * trotz(pi/2);
-            set(f17,'Vertices',verts(:,1:3))
-            hold on;
-            f18 =PlaceObject('fenceFinal.ply',[1.2 - Y, X - 1, ZLowerAxis + 2*heightofFence]);
-            verts = [get(f18,'Vertices'), ones(size(get(f18,'Vertices'),1),1)] * trotz(pi/2);
-            set(f18,'Vertices',verts(:,1:3))
-            hold on;
-
-            f19 =PlaceObject('fenceFinal.ply',[1.2 - Y, X - 0.2, ZLowerAxis]);
-            verts = [get(f19,'Vertices'), ones(size(get(f19,'Vertices'),1),1)] * trotz(pi/2);
-            set(f19,'Vertices',verts(:,1:3))
-            hold on;
-            f20 =PlaceObject('fenceFinal.ply',[1.2 - Y, X - 0.2, ZLowerAxis + heightofFence]);
-            verts = [get(f20,'Vertices'), ones(size(get(f20,'Vertices'),1),1)] * trotz(pi/2);
-            set(f20,'Vertices',verts(:,1:3))
-            hold on;
-            f21 =PlaceObject('fenceFinal.ply',[1.2 - Y, X - 0.2, ZLowerAxis + 2*heightofFence]);
-            verts = [get(f21,'Vertices'), ones(size(get(f21,'Vertices'),1),1)] * trotz(pi/2);
-            set(f21,'Vertices',verts(:,1:3))
-            hold on;
+            %Number of Fences Calculated to fit each axis completely
+            fenceNumZ = round((ZUpperAxis+abs(ZLowerAxis))/heightofFence);
+            fenceNumX = round(lengthOfBorderX/lengthofFence);
+            fenceNumY = round(lengthOfBorderY/lengthofFence);
             
-            f22 =PlaceObject('fenceFinal.ply',[1.2 - Y, X + 0.6, ZLowerAxis]);
-            verts = [get(f22,'Vertices'), ones(size(get(f22,'Vertices'),1),1)] * trotz(pi/2);
-            set(f22,'Vertices',verts(:,1:3))
-            hold on;
-            f23 =PlaceObject('fenceFinal.ply',[1.2 - Y, X + 0.6, ZLowerAxis + heightofFence]);
-            verts = [get(f23,'Vertices'), ones(size(get(f23,'Vertices'),1),1)] * trotz(pi/2);
-            set(f23,'Vertices',verts(:,1:3))
-            hold on;
-            f24 =PlaceObject('fenceFinal.ply',[1.2 - Y, X + 0.6, ZLowerAxis + 2*heightofFence]);
-            verts = [get(f24,'Vertices'), ones(size(get(f24,'Vertices'),1),1)] * trotz(pi/2);
-            set(f24,'Vertices',verts(:,1:3))
-            hold on;
+            %Fence Wall at y-axis at x = 1.2
+            for j = 1:fenceNumY
+                for i = 1:fenceNumZ
+                    fenceY(i+fenceNumZ*(j-1)) = PlaceObject('fenceFinal.ply',[lengthOfBorderX + XLowerAxis, YUpperAxis - fenceOffset - lengthofFence * (j-1), ZLowerAxis + (i-1)*heightofFence]);
+                    hold on;
+                end
+            end
             
-            f25 =PlaceObject('fenceFinal.ply',[-1.2 - Y, X - 1 , ZLowerAxis]);
-            verts = [get(f25,'Vertices'), ones(size(get(f25,'Vertices'),1),1)] * trotz(pi/2);
-            set(f25,'Vertices',verts(:,1:3))
-            hold on;
-            f26 =PlaceObject('fenceFinal.ply',[-1.2 - Y, X - 1 , ZLowerAxis + heightofFence]);
-            verts = [get(f26,'Vertices'), ones(size(get(f26,'Vertices'),1),1)] * trotz(pi/2);
-            set(f26,'Vertices',verts(:,1:3))
-            hold on;
-            f27 =PlaceObject('fenceFinal.ply',[-1.2 - Y, X - 1 , ZLowerAxis + 2*heightofFence]);
-            verts = [get(f27,'Vertices'), ones(size(get(f27,'Vertices'),1),1)] * trotz(pi/2);
-            set(f27,'Vertices',verts(:,1:3))
-            hold on;
-            
-            f28 =PlaceObject('fenceFinal.ply',[-1.2 - Y, X - 0.2, ZLowerAxis]);
-            verts = [get(f28,'Vertices'), ones(size(get(f28,'Vertices'),1),1)] * trotz(pi/2);
-            set(f28,'Vertices',verts(:,1:3))
-            hold on;
-            f29 =PlaceObject('fenceFinal.ply',[-1.2 - Y, X - 0.2, ZLowerAxis + heightofFence]);
-            verts = [get(f29,'Vertices'), ones(size(get(f29,'Vertices'),1),1)] * trotz(pi/2);
-            set(f29,'Vertices',verts(:,1:3))
-            hold on;
-            f30 =PlaceObject('fenceFinal.ply',[-1.2 - Y, X - 0.2, ZLowerAxis + 2*heightofFence]);
-            verts = [get(f30,'Vertices'), ones(size(get(f30,'Vertices'),1),1)] * trotz(pi/2);
-            set(f30,'Vertices',verts(:,1:3))
-            hold on;
-            
-            f31 =PlaceObject('fenceFinal.ply',[-1.2 - Y, X + 0.6, ZLowerAxis]);
-            verts = [get(f31,'Vertices'), ones(size(get(f31,'Vertices'),1),1)] * trotz(pi/2);
-            set(f31,'Vertices',verts(:,1:3))
-            hold on;
-            f32 =PlaceObject('fenceFinal.ply',[-1.2 - Y, X + 0.6, ZLowerAxis + heightofFence]);
-            verts = [get(f32,'Vertices'), ones(size(get(f32,'Vertices'),1),1)] * trotz(pi/2);
-            set(f32,'Vertices',verts(:,1:3))
-            hold on;
-            f33 =PlaceObject('fenceFinal.ply',[-1.2 - Y, X + 0.6, ZLowerAxis + 2*heightofFence]);
-            verts = [get(f33,'Vertices'), ones(size(get(f33,'Vertices'),1),1)] * trotz(pi/2);
-            set(f33,'Vertices',verts(:,1:3))
-            hold on;
+            %Fence Wall along x-axis at y = -1.2m
+            for j = 1:fenceNumX
+                for i = 1:fenceNumZ
+                    fenceX(i+fenceNumZ*(j-1)) = PlaceObject('fenceFinal.ply',[ -(YUpperAxis - lengthOfBorderY), XLowerAxis + fenceOffset + lengthofFence * (j-1), ZLowerAxis + (i-1)*heightofFence]);
+                    verts = [get(fenceX(i+fenceNumZ*(j-1)),'Vertices'), ones(size(get(fenceX(i+fenceNumZ*(j-1)),'Vertices'),1),1)] * trotz(pi/2);
+                    set(fenceX(i+fenceNumZ*(j-1)),'Vertices',verts(:,1:3))
+                    hold on;
+                end
+            end
             
             %Plot the Kitchen Table
             t1 = PlaceObject('kitchenTable.ply',[0, 0, 0]);
             verts = [get(t1,'Vertices'), ones(size(get(t1,'Vertices'),1),1)]* trotx(-pi/2);
-            verts(:,1) = verts(:,1) *0.0008;
+            verts(:,1) = verts(:,1) *0.001;
             verts(:,2) = verts(:,2) *0.0008;
             verts(:,3) = verts(:,3) *0.0008;
             set(t1,'Vertices',verts(:,1:3))
             hold on;
 
-            m1 = PlaceObject('Milk.ply',[10*YShelf/0.008, 10*0.83/0.008, 10*(X+XShelf)/0.008]);
+            %Plot the Laptop table 
+            t2 = PlaceObject('computerTable.ply',[10*(1.7)/0.008, 10*0.25/0.008, 10*0/0.008]);
+            verts = [get(t2,'Vertices'), ones(size(get(t2,'Vertices'),1),1)]* trotx(-pi/2);
+            verts(:,1) = verts(:,1)*0.0008;
+            verts(:,2) = verts(:,2)*0.0008;
+            verts(:,3) = verts(:,3)*0.0015;
+            set(t2,'Vertices',verts(:,1:3))
+            hold on;
+
+            %Plot the Emergency Stop table 
+            t3 = PlaceObject('computerTable.ply',[10*(1.7)/0.008, 10*0.25/0.008, 10*(1)/0.008]);
+            verts = [get(t3,'Vertices'), ones(size(get(t3,'Vertices'),1),1)]* trotx(-pi/2);
+            verts(:,1) = verts(:,1)*0.0008;
+            verts(:,2) = verts(:,2)*0.0008;
+            verts(:,3) = verts(:,3)*0.0015;
+            set(t3,'Vertices',verts(:,1:3))
+            hold on;
+
+            %Plot Laptop
+            l1 = PlaceObject('Laptop.ply',[10*(1.7)/0.008, 10*0/0.008, 10*0.6/0.008]);
+            verts = [get(l1,'Vertices'), ones(size(get(l1,'Vertices'),1),1)];
+            verts(:,1) = verts(:,1)*0.0008;
+            verts(:,2) = verts(:,2)*0.0008;
+            verts(:,3) = verts(:,3)*0.0008;
+            set(l1,'Vertices',verts(:,1:3))
+            hold on;
+            
+            %Milk Carton Coordinates
+            m1 = PlaceObject('Milk.ply',[10*YShelf/0.008, 10*0.83/0.008, 10*(-XShelf)/0.008]);
             verts = [get(m1,'Vertices'), ones(size(get(m1,'Vertices'),1),1)] * trotx(-pi/2) * trotz(pi/2);
             verts(:,1) = verts(:,1) *0.0008;
             verts(:,2) = verts(:,2) *0.0008;
@@ -329,7 +267,7 @@ classdef EthanHelpers < handle
             hold on;
             
             %Plot the Shelf
-            s1 = PlaceObject('Shelf.ply',[10*YShelf/0.008, 10*ZLowerAxis/0.008, 10*(X+XShelf)/0.008]);
+            s1 = PlaceObject('Shelf.ply',[10*YShelf/0.008, 10*ZLowerAxis/0.008, 10*(-XShelf)/0.008]);
             verts = [get(s1,'Vertices'), ones(size(get(s1,'Vertices'),1),1)]* trotx(-pi/2) * trotz(pi/2);
             verts(:,1) = verts(:,1)*0.0008;
             verts(:,2) = verts(:,2)*0.0008;
@@ -339,58 +277,75 @@ classdef EthanHelpers < handle
 
             %Plot the concrete ground
             set(0,'DefaultFigureWindowStyle','docked');
-            surf([-2,-2;2,2] ...
-                ,[-2,2;-2,2] ...
-                ,[-0.565,-0.565;-0.565,-0.565] ...
+            surf([XLowerAxis,XLowerAxis;XUpperAxis,XUpperAxis] ...
+                ,[YLowerAxis,YUpperAxis;YLowerAxis,YUpperAxis] ...
+                ,[ZLowerAxis,ZLowerAxis;ZLowerAxis,ZLowerAxis] ...
                 ,'CData',imread('concrete.jpg') ...
                 ,'FaceColor','texturemap');
             
             % wall 1
-            surf([-2,-2;-2,-2] ...
-            ,[-2,-2;2,2] ...
-            ,[3,-0.565;3,-0.565] ...
+            surf([XLowerAxis,XLowerAxis;XLowerAxis,XLowerAxis] ...
+            ,[YLowerAxis,YLowerAxis;YUpperAxis,YUpperAxis] ...
+            ,[ZUpperAxis,ZLowerAxis;ZUpperAxis,ZLowerAxis] ...
             ,'CData',permute(imread('wall.jpg'),[2 1 3]) ...
             ,'FaceColor','texturemap');
             
             % wall 2
-            surf([-2,-2;2,2] ...
-            ,[2,2;2,2] ...
-            ,[3,-0.565;3,-0.565] ...
+            surf([XLowerAxis,XLowerAxis;XUpperAxis,XUpperAxis] ...
+            ,[YUpperAxis,YUpperAxis;YUpperAxis,YUpperAxis] ...
+            ,[ZUpperAxis,ZLowerAxis;ZUpperAxis,ZLowerAxis] ...
             ,'CData',permute(imread('wall.jpg'),[2 1 3]) ...
             ,'FaceColor','texturemap');
 
             % operator
             PlaceObject('Worker.ply', ...
-            [ 1.9+X 1+Y ZLowerAxis]);
+            [ 2.5+X 0+Y ZLowerAxis]);
+            PlaceObject('Worker.ply', ...
+            [ 2.5+X -1+Y ZLowerAxis]);
             % fire extinguisher
             PlaceObject('FireExtinguisherCO2.ply', ...
-            [ 1.9+X 1.6+Y ZLowerAxis]);
+            [ 1.9+X 0.9+Y ZLowerAxis]);
         
             % signs
             % safety boots
             surf([1.6,1.6;1.9,1.9] ...
-            ,[1.99,1.99;1.99,1.99] ...
+            ,[Y+YSignOffset,Y+YSignOffset;Y+YSignOffset,Y+YSignOffset] ...
             ,[1.8,1.5;1.8,1.5] ...
             ,'CData',permute(imread('Safety_Boots.jpg'),[2 1 3]) ...
             ,'FaceColor','texturemap');
             % safety glasses
             surf([1.2,1.2;1.5,1.5] ...
-            ,[1.99,1.99;1.99,1.99] ...
+            ,[Y+YSignOffset,Y+YSignOffset;Y+YSignOffset,Y+YSignOffset] ...
             ,[1.8,1.5;1.8,1.5] ...
             ,'CData',permute(imread('Eye_Protection.jpg'),[2 1 3]) ...
             ,'FaceColor','texturemap');
             % no tresspass
             surf([0.8,0.8;1.1,1.1] ...
-            ,[1.99,1.99;1.99,1.99] ...
+            ,[Y+YSignOffset,Y+YSignOffset;Y+YSignOffset,Y+YSignOffset] ...
             ,[1.8,1.35;1.8,1.35] ...
             ,'CData',permute(imread('No_Tresspassing.jpg'),[2 1 3]) ...
             ,'FaceColor','texturemap');
+            
+            axis([XLowerAxis XUpperAxis+X YLowerAxis+Y YUpperAxis+Y ZLowerAxis ZUpperAxis+Z]);
+            hold on
         end
 
         %Plot all the brick
         function [b1, b2] = PlotBrick(brick1, brick2)
             b1 = PlaceObject('Milk.ply' ,brick1);
+            verts = [get(b1,'Vertices'), ones(size(get(b1,'Vertices'),1),1)] * trotx(-pi/2) * trotz(pi/2);
+            verts(:,1) = verts(:,1)*0.0008;
+            verts(:,2) = verts(:,2)*0.0008;
+            verts(:,3) = verts(:,3)*0.0008;
+            set(b1,'Vertices',verts(:,1:3))
+            hold on;
             b2 = PlaceObject('Milk.ply' ,brick2);
+            verts = [get(b2,'Vertices'), ones(size(get(b2,'Vertices'),1),1)] * trotx(-pi/2) * trotz(pi/2);
+            verts(:,1) = verts(:,1)*0.0008;
+            verts(:,2) = verts(:,2)*0.0008;
+            verts(:,3) = verts(:,3)*0.0008;
+            set(b2,'Vertices',verts(:,1:3))
+            hold on;
         end
 
  
