@@ -70,7 +70,7 @@ classdef EthanHelpers < handle
             for i=1:size(qArray,1)
 
                 % Take the forward kinematic for the brick
-                brick = self.model.fkineUTS(10*qArray(i,:)/0.008);
+                brick = self.model.fkineUTS(qArray(i,:));
 
                 %BrickPose is the 4x4 matrix, transl(0,0,0.1) is move the brick down 0.1 in the Z direction
                 %to make it look like it is grasped by the gripper
@@ -80,7 +80,7 @@ classdef EthanHelpers < handle
                 UpdatedPoints = [BrickPose * [v,ones(BrickVertex,1)]']';
 
                 %The vertices are all the rows and 1 to 3 columns of the UpdatedPoints
-                BrickMesh_h.Vertices = UpdatedPoints(:,1:3)*0.0008;
+                BrickMesh_h.Vertices = UpdatedPoints(:,1:3);
 
                 %Animate the robot arm
                 self.model.animate(qArray(i,:));
@@ -333,19 +333,7 @@ classdef EthanHelpers < handle
         %Plot all the brick
         function [b1, b2] = PlotBrick(brick1, brick2)
             b1 = PlaceObject('Milk.ply' ,brick1);
-            verts = [get(b1,'Vertices'), ones(size(get(b1,'Vertices'),1),1)] * trotx(-pi/2) * trotz(pi/2);
-            verts(:,1) = verts(:,1)*0.0008;
-            verts(:,2) = verts(:,2)*0.0008;
-            verts(:,3) = verts(:,3)*0.0008;
-            set(b1,'Vertices',verts(:,1:3))
-            hold on;
             b2 = PlaceObject('Milk.ply' ,brick2);
-            verts = [get(b2,'Vertices'), ones(size(get(b2,'Vertices'),1),1)] * trotx(-pi/2) * trotz(pi/2);
-            verts(:,1) = verts(:,1)*0.0008;
-            verts(:,2) = verts(:,2)*0.0008;
-            verts(:,3) = verts(:,3)*0.0008;
-            set(b2,'Vertices',verts(:,1:3))
-            hold on;
         end
 
  
