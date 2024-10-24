@@ -53,8 +53,8 @@ XShelfOffset = -0.14;
 YShelf = 0;
 
 %brick{i} = [x y 0] %brick{i}arm = [x y z+0.15]
-brick1 = [b1X + X, b1Y + Y, b1Z + Z];
-brick1ArmPos = [b1X + X, b1Y + Y, 0.15 + Z]; %z+0.15
+brick1 = [XShelf, YShelf, 0.83];
+brick1ArmPos = [XShelf+0.2, YShelf, 0.83 ]; %z+0.15
 brick1WallPos = [-1 + X, -0.1465 + Y, 0.15 + Z]; %-x and z+0.15
 
 brick2 = [b2X + X, b2Y + Y, b1Z + Z];
