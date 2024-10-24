@@ -2,7 +2,7 @@ classdef Robot < handle
     %ROBOT Wrapper for convenient use of robotics toolbox
     %   Helper and convenience functions for robotics toolbox
     
-    properties
+    properties (Access=private)
         r
         qCurrent
         qTarget
@@ -25,6 +25,7 @@ classdef Robot < handle
             obj.r = r;
             obj.qCurrent = q;
             obj.endEffectorOffset = endEffectorOffset;
+            obj.trTarget = r.model.fkine(obj.qCurrent);
             r.model.animate(q);
         end
 
@@ -43,6 +44,7 @@ classdef Robot < handle
         end
 
         function StepArm(obj)
+            obj.qCurrent = obj.qTraj(1,:);
             obj.r.model.animate(obj.qTraj(1,:));
             obj.qTraj(1,:) = [];
             drawnow;
@@ -57,19 +59,25 @@ classdef Robot < handle
             if nargin < 2
                 tr = obj.trTarget;
             end
+            if nargin < 3
+                entity = "none";
+            end 
 
             status = false;
+
+            if obj.trTarget ~= tr
+                obj.SetTarget(tr);
+            end
 
             if isempty(obj.qTraj)
                 status = true;
                 return
             end
-            
-            if obj.trTarget ~= tr
-                obj.SetTarget(tr);
-            end
 
             obj.StepArm();
+            if entity ~= "none"
+                entity.Move(obj.r.model.fkine(obj.qCurrent).T);
+            end 
         end
 
     end

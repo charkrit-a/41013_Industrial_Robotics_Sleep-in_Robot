@@ -2,7 +2,7 @@ classdef Entity < handle
     %ENTITY Class to represent moveable objects
     %   Plots ply model, track and move its position
     
-    properties 
+    properties (Access=private)
         pose;
         sizeWHD;
         mesh_h;
@@ -29,7 +29,9 @@ classdef Entity < handle
             vertsHomogeneous = [v, ones(obj.vertCount, 1)];
             vertsTransformed = (tr * vertsHomogeneous')';
             
+            % save the original vertices to move the object later
             obj.verts = vertsHomogeneous;
+
             % Scale the colours to be 0-to-1 (they are originally 0-to-255)   
             try
                 vertexColours = [data.vertex.red, data.vertex.green, data.vertex.blue] / 255;
@@ -51,7 +53,7 @@ classdef Entity < handle
             tr = obj.pose;
         end
 
-        function obj = Move(obj, newPose)
+        function Move(obj, newPose)
             %MOVE move the brick to a new pose
             %   By multiplying all vertices by the new global pose
             % Store the new pose
