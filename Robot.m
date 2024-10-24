@@ -65,8 +65,9 @@ classdef Robot < handle
 
             status = false;
 
-            if obj.trTarget ~= tr
+            if any(obj.trTarget ~= tr, 'all')
                 obj.SetTarget(tr);
+                return
             end
 
             if isempty(obj.qTraj)
