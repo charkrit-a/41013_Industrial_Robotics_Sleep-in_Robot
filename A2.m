@@ -9,7 +9,7 @@ function A2(app)
     
     % plot robots
     r1 = Robot(LinearUR3e(transl(-0.3,0,0)));
-    r2 = Robot(UR3e(transl(0.5,0.2,0)*trotz(pi/2)));
+    r2 = Robot(UR3e(transl(0.5,0.2,0)*trotz(pi/2), true, 'gripper_2fg7_base'));
 
     % place objects
     milk = Entity("Milk.ply", [0.06 0.18 0.06], transl(-1.8,-0.35,0.1));
