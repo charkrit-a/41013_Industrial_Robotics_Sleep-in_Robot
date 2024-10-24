@@ -21,7 +21,7 @@ function EnvironmentA2()
     YUpperAxis = Y + YWallOffset;
     
     %Fence Dimensions
-    heightofFence = 0.5;
+    heightofFence = 0.4;
     lengthofFence = 0.8;
     fenceOffset = 0.4;
    
@@ -29,7 +29,7 @@ function EnvironmentA2()
     lengthOfBorderY = 2.4; %Fence border along y-axis
     
     %Number of Fences Calculated to fit each axis completely
-    fenceNumZ = round((ZUpperAxis+abs(ZLowerAxis))/heightofFence);
+    fenceNumZ = 4;
     fenceNumX = round(lengthOfBorderX/lengthofFence);
     fenceNumY = round(lengthOfBorderY/lengthofFence);
     
@@ -37,7 +37,7 @@ function EnvironmentA2()
     for j = 1:fenceNumY
         for i = 1:fenceNumZ
             fenceY(i+fenceNumZ*(j-1)) = PlaceObject('fenceFinal.ply',[lengthOfBorderX + XLowerAxis, YUpperAxis - fenceOffset - lengthofFence * (j-1), ZLowerAxis + (i-1)*heightofFence]);
-            hold on;
+            
         end
     end
     
@@ -47,7 +47,7 @@ function EnvironmentA2()
             fenceX(i+fenceNumZ*(j-1)) = PlaceObject('fenceFinal.ply',[ -(YUpperAxis - lengthOfBorderY), XLowerAxis + fenceOffset + lengthofFence * (j-1), ZLowerAxis + (i-1)*heightofFence]);
             verts = [get(fenceX(i+fenceNumZ*(j-1)),'Vertices'), ones(size(get(fenceX(i+fenceNumZ*(j-1)),'Vertices'),1),1)] * trotz(pi/2);
             set(fenceX(i+fenceNumZ*(j-1)),'Vertices',verts(:,1:3))
-            hold on;
+            
         end
     end
     
@@ -58,8 +58,7 @@ function EnvironmentA2()
     verts(:,2) = verts(:,2) *0.0008;
     verts(:,3) = verts(:,3) *0.0008;
     set(t1,'Vertices',verts(:,1:3))
-    hold on;
-
+    
     %Plot the Laptop table 
     t2 = PlaceObject('computerTable.ply',[10*(1.7)/0.008, 10*0.25/0.008, 10*0/0.008]);
     verts = [get(t2,'Vertices'), ones(size(get(t2,'Vertices'),1),1)]* trotx(-pi/2);
@@ -67,8 +66,7 @@ function EnvironmentA2()
     verts(:,2) = verts(:,2)*0.0008;
     verts(:,3) = verts(:,3)*0.0015;
     set(t2,'Vertices',verts(:,1:3))
-    hold on;
-
+    
     %Plot the Emergency Stop table 
     t3 = PlaceObject('computerTable.ply',[10*(1.7)/0.008, 10*0.25/0.008, 10*(1)/0.008]);
     verts = [get(t3,'Vertices'), ones(size(get(t3,'Vertices'),1),1)]* trotx(-pi/2);
@@ -76,8 +74,7 @@ function EnvironmentA2()
     verts(:,2) = verts(:,2)*0.0008;
     verts(:,3) = verts(:,3)*0.0015;
     set(t3,'Vertices',verts(:,1:3))
-    hold on;
-
+    
     %Plot Laptop
     l1 = PlaceObject('Laptop.ply',[10*(1.7)/0.008, 10*0/0.008, 10*0.6/0.008]);
     verts = [get(l1,'Vertices'), ones(size(get(l1,'Vertices'),1),1)];
@@ -85,16 +82,6 @@ function EnvironmentA2()
     verts(:,2) = verts(:,2)*0.0008;
     verts(:,3) = verts(:,3)*0.0008;
     set(l1,'Vertices',verts(:,1:3))
-    hold on;
-    
-    %Milk Carton Coordinates
-    m1 = PlaceObject('Milk.ply',[10*YShelf/0.008, 10*0.83/0.008, 10*(-XShelf)/0.008]);
-    verts = [get(m1,'Vertices'), ones(size(get(m1,'Vertices'),1),1)] * trotx(-pi/2) * trotz(pi/2);
-    verts(:,1) = verts(:,1) *0.0008;
-    verts(:,2) = verts(:,2) *0.0008;
-    verts(:,3) = verts(:,3) *0.0008;
-    set(m1,'Vertices',verts(:,1:3))
-    hold on;
     
     %Plot the Shelf
     s1 = PlaceObject('Shelf.ply',[10*YShelf/0.008, 10*ZLowerAxis/0.008, 10*(-XShelf)/0.008]);
@@ -103,8 +90,7 @@ function EnvironmentA2()
     verts(:,2) = verts(:,2)*0.0008;
     verts(:,3) = verts(:,3)*0.0008;
     set(s1,'Vertices',verts(:,1:3))
-    hold on;
-
+    
     %Plot the concrete ground
     set(0,'DefaultFigureWindowStyle','docked');
     surf([XLowerAxis,XLowerAxis;XUpperAxis,XUpperAxis] ...
