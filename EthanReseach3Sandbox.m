@@ -26,7 +26,7 @@ b2Z = 0;
 %% Plot the Research 3 and the gripper
 
 % Call the LinearResearch3
-r = LinearUR3e (transl(X,Y,Z));
+r = LinearUR10e (transl(X,Y,Z));
 r2 = UR3(transl(0.5,0.2,0)*trotz(pi/2));
 hold on 
 

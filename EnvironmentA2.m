@@ -6,7 +6,7 @@ function EnvironmentA2()
     Z = 0;
     XUpperAxis = 3;
     YLowerAxis = -3;
-    ZUpperAxis = 2;
+    ZUpperAxis = 1.5;
     ZLowerAxis = -0.57;
 
     %Shelf Coordinates
@@ -26,10 +26,10 @@ function EnvironmentA2()
     fenceOffset = 0.4;
    
     lengthOfBorderX = 3.2; %Fence border along x-axis
-    lengthOfBorderY = 2.4; %Fence border along y-axis
+    lengthOfBorderY = 3.2; %Fence border along y-axis
     
     %Number of Fences Calculated to fit each axis completely
-    fenceNumZ = 4;
+    fenceNumZ = round((ZUpperAxis+abs(ZLowerAxis))/heightofFence)-1;
     fenceNumX = round(lengthOfBorderX/lengthofFence);
     fenceNumY = round(lengthOfBorderY/lengthofFence);
     
@@ -51,6 +51,10 @@ function EnvironmentA2()
         end
     end
     
+    %Plot Kitchen
+    PlaceObject('Kitchen.PLY', ...
+    [ XLowerAxis YUpperAxis ZLowerAxis]);
+
     %Plot the Kitchen Table
     t1 = PlaceObject('kitchenTable.ply',[0, 0, 0]);
     verts = [get(t1,'Vertices'), ones(size(get(t1,'Vertices'),1),1)]* trotx(-pi/2);
@@ -82,14 +86,6 @@ function EnvironmentA2()
     verts(:,2) = verts(:,2)*0.0008;
     verts(:,3) = verts(:,3)*0.0008;
     set(l1,'Vertices',verts(:,1:3))
-    
-    %Plot the Shelf
-    s1 = PlaceObject('Shelf.ply',[10*YShelf/0.008, 10*ZLowerAxis/0.008, 10*(-XShelf)/0.008]);
-    verts = [get(s1,'Vertices'), ones(size(get(s1,'Vertices'),1),1)]* trotx(-pi/2) * trotz(pi/2);
-    verts(:,1) = verts(:,1)*0.0008;
-    verts(:,2) = verts(:,2)*0.0008;
-    verts(:,3) = verts(:,3)*0.0008;
-    set(s1,'Vertices',verts(:,1:3))
     
     %Plot the concrete ground
     set(0,'DefaultFigureWindowStyle','docked');

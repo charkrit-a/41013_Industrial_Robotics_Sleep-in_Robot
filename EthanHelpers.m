@@ -182,7 +182,6 @@ classdef EthanHelpers < handle
             %Shelf Coordinates
             XShelf = -1.5+X;
             XShelfOffset = -0.14;
-            YShelf = 0;
             YWallOffset = 1.2;
             YSignOffset = YWallOffset-0.01;
             
@@ -196,7 +195,7 @@ classdef EthanHelpers < handle
             fenceOffset = 0.4;
            
             lengthOfBorderX = 3.2; %Fence border along x-axis
-            lengthOfBorderY = 2.4; %Fence border along y-axis
+            lengthOfBorderY = 3.2; %Fence border along y-axis
             
             %Number of Fences Calculated to fit each axis completely
             fenceNumZ = round((ZUpperAxis+abs(ZLowerAxis))/heightofFence);
@@ -258,7 +257,7 @@ classdef EthanHelpers < handle
             hold on;
             
             %Milk Carton Coordinates
-            m1 = PlaceObject('Milk.ply',[10*YShelf/0.008, 10*0.83/0.008, 10*(-XShelf)/0.008]);
+            m1 = PlaceObject('Milk.ply',[10*0/0.008, 10*0.83/0.008, 10*(-XShelf)/0.008]);
             verts = [get(m1,'Vertices'), ones(size(get(m1,'Vertices'),1),1)] * trotx(-pi/2) * trotz(pi/2);
             verts(:,1) = verts(:,1) *0.0008;
             verts(:,2) = verts(:,2) *0.0008;
@@ -267,13 +266,17 @@ classdef EthanHelpers < handle
             hold on;
             
             %Plot the Shelf
-            s1 = PlaceObject('Shelf.ply',[10*YShelf/0.008, 10*ZLowerAxis/0.008, 10*(-XShelf)/0.008]);
-            verts = [get(s1,'Vertices'), ones(size(get(s1,'Vertices'),1),1)]* trotx(-pi/2) * trotz(pi/2);
-            verts(:,1) = verts(:,1)*0.0008;
-            verts(:,2) = verts(:,2)*0.0008;
-            verts(:,3) = verts(:,3)*0.0008;
-            set(s1,'Vertices',verts(:,1:3))
-            hold on;
+            %s1 = PlaceObject('Shelf.ply',[10*YShelf/0.008, 10*ZLowerAxis/0.008, 10*(-XShelf)/0.008]);
+            %verts = [get(s1,'Vertices'), ones(size(get(s1,'Vertices'),1),1)]* trotx(-pi/2) * trotz(pi/2);
+            %verts(:,1) = verts(:,1)*0.0008;
+            %verts(:,2) = verts(:,2)*0.0008;
+            %verts(:,3) = verts(:,3)*0.0008;
+            %set(s1,'Vertices',verts(:,1:3))
+            %hold on;
+
+            %Plot Kitchen
+            PlaceObject('Kitchen.PLY', ...
+            [ XLowerAxis YUpperAxis ZLowerAxis]);
 
             %Plot the concrete ground
             set(0,'DefaultFigureWindowStyle','docked');
