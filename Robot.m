@@ -38,8 +38,9 @@ classdef Robot < handle
             end
             
             obj.trTarget = tr;
+            trWithOffset = tr/obj.endEffectorOffset;
             % obj.qTarget = obj.r.model.ikine(tr, obj.qCurrent, 'mask', [1 1 1 0 0 0]);
-            obj.qTarget = obj.r.model.ikcon(tr, obj.qCurrent);
+            obj.qTarget = obj.r.model.ikcon(trWithOffset, obj.qCurrent);
             obj.qTraj = jtraj(obj.qCurrent,obj.qTarget,steps);
         end
 

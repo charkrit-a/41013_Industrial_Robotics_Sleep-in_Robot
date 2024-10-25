@@ -4,25 +4,20 @@ classdef Entity < handle
     
     properties (Access=private)
         pose;
-        sizeWHD;
         mesh_h;
         vertCount;
         verts;
     end
     
     methods
-        function obj = Entity(modelFile, WHD, tr)
+        function obj = Entity(modelFile, tr)
             %ENTITY Construct an instance of this class
             %   Construct class and draw entity in plot
-            if nargin < 3
-                tr = eye(4);
-            end
             if nargin < 2
-                WHD = [1,1,1];
+                tr = eye(4);
             end
             
             obj.pose = tr;
-            obj.sizeWHD = WHD;
 
             [f,v,data] = plyread(modelFile, 'tri');
             obj.vertCount = size(v,1);

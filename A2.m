@@ -8,12 +8,15 @@ function A2(app)
     EnvironmentA2();
     
     % plot robots
-    r1 = Robot(LinearUR3e(transl(-0.3,0,0)));
-    r2 = Robot(UR3e(transl(0.5,0.2,0)*trotz(pi/2), true, 'gripper_2fg7_base'));
+    r1 = Robot(LinearUR10e(transl(-0.3,0,0)));
+    r2 = Robot(UR3e(transl(0.5,0.2,0)*trotz(pi/2), true, 'gripper_2fg7_base'), transl(0,0,0.08), [0 -pi/2 pi/2 -pi/2 -pi/2 0]);
 
     % place objects
-    milk = Entity("Milk.ply", [0.06 0.18 0.06], transl(-1.8,-0.35,0.1));
-    juice = Entity("OrangeJuice.ply", [0.06 0.18 0.06], transl(-1.8,-0.25,0.1));
+    milk = Entity("Milk.ply", transl(-1.8,0.7,0.1));
+    juice = Entity("OrangeJuice.ply", transl(-1.8,0.8,0.1));
+    cerealGreen = Entity("CerealBox_Green.ply", transl(-0.7,1,1)*trotz(pi/2));
+    cerealPurple = Entity("CerealBox_Purple.ply", transl(-1.25,1,1)*trotz(pi/2));
+    cerealRed = Entity("CerealBox_Red.ply", transl(-1,1,1)*trotz(pi/2));
 
     disp("Setup complete, press any key to continue...")
     pause
@@ -39,7 +42,7 @@ function A2(app)
             break
         end 
 
-        pause(0.02); % pause for smoother animations
+        pause(0.03); % pause for smoother animations
     end
     
     disp("End, press any key to exit program.")
