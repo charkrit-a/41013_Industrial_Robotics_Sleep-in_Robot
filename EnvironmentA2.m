@@ -78,12 +78,16 @@ function EnvironmentA2()
     set(t3,'Vertices',verts(:,1:3))
     
     %Plot Laptop
-    l1 = PlaceObject('Laptop.ply',[10*(1.7)/0.008, 10*0/0.008, 10*0.6/0.008]);
+    l1 = PlaceObject('Laptop.ply',[10*(1.6)/0.008, 10*0/0.008, 10*0.5/0.008]);
     verts = [get(l1,'Vertices'), ones(size(get(l1,'Vertices'),1),1)];
     verts(:,1) = verts(:,1)*0.0008;
     verts(:,2) = verts(:,2)*0.0008;
     verts(:,3) = verts(:,3)*0.0008;
     set(l1,'Vertices',verts(:,1:3))
+
+    %E-Stop Button
+    PlaceObject('Emergency_Stop_Button.PLY', ...
+    [ 1.7 -1 0.5]);
     
     %Plot the concrete ground
     set(0,'DefaultFigureWindowStyle','docked');
