@@ -278,6 +278,10 @@ classdef EthanHelpers < handle
             PlaceObject('Kitchen.PLY', ...
             [ XLowerAxis YUpperAxis ZLowerAxis]);
 
+            %Plot Cereal Box
+            PlaceObject('CerealBox.PLY', ...
+            [ 0 0 0]);
+
             %Plot the concrete ground
             set(0,'DefaultFigureWindowStyle','docked');
             surf([XLowerAxis,XLowerAxis;XUpperAxis,XUpperAxis] ...
