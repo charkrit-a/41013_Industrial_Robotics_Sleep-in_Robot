@@ -12,14 +12,14 @@ classdef Robot < handle
     end
     
     methods
-        function obj = Robot(r,q,endEffectorOffset)
+        function obj = Robot(r,endEffectorOffset,q)
             %ROBOT Construct an instance of this class
             %   Detailed explanation goes here
             if nargin < 3
-                endEffectorOffset = transl(0,0,0);
+                q = GenerateInitialQ(r);
             end
             if nargin < 2
-                q = GenerateInitialQ(r);
+                endEffectorOffset = transl(0,0,0);
             end
 
             obj.r = r;
@@ -77,7 +77,8 @@ classdef Robot < handle
 
             obj.StepArm();
             if entity ~= "none"
-                entity.Move(obj.r.model.fkine(obj.qCurrent).T);
+                trEntity = obj.r.model.fkine(obj.qCurrent).T * obj.endEffectorOffset;
+                entity.Move(trEntity);
             end 
         end
 
