@@ -6,7 +6,7 @@ function EnvironmentA2()
     Z = 0;
     XUpperAxis = 3;
     YLowerAxis = -3;
-    ZUpperAxis = 1.5;
+    ZUpperAxis = 2;
     ZLowerAxis = -0.57;
 
     %Shelf Coordinates
@@ -29,7 +29,7 @@ function EnvironmentA2()
     lengthOfBorderY = 3.2; %Fence border along y-axis
     
     %Number of Fences Calculated to fit each axis completely
-    fenceNumZ = round((ZUpperAxis+abs(ZLowerAxis))/heightofFence)-1;
+    fenceNumZ = 4;
     fenceNumX = round(lengthOfBorderX/lengthofFence);
     fenceNumY = round(lengthOfBorderY/lengthofFence);
     
@@ -37,7 +37,6 @@ function EnvironmentA2()
     for j = 1:fenceNumY
         for i = 1:fenceNumZ
             fenceY(i+fenceNumZ*(j-1)) = PlaceObject('fenceFinal.ply',[lengthOfBorderX + XLowerAxis, YUpperAxis - fenceOffset - lengthofFence * (j-1), ZLowerAxis + (i-1)*heightofFence]);
-            
         end
     end
     
@@ -47,7 +46,6 @@ function EnvironmentA2()
             fenceX(i+fenceNumZ*(j-1)) = PlaceObject('fenceFinal.ply',[ -(YUpperAxis - lengthOfBorderY), XLowerAxis + fenceOffset + lengthofFence * (j-1), ZLowerAxis + (i-1)*heightofFence]);
             verts = [get(fenceX(i+fenceNumZ*(j-1)),'Vertices'), ones(size(get(fenceX(i+fenceNumZ*(j-1)),'Vertices'),1),1)] * trotz(pi/2);
             set(fenceX(i+fenceNumZ*(j-1)),'Vertices',verts(:,1:3))
-            
         end
     end
     
