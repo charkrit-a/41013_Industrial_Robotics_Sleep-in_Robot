@@ -279,7 +279,7 @@ classdef EthanHelpers < handle
             [ XLowerAxis YUpperAxis ZLowerAxis]);
 
             %Plot Cereal Box
-            PlaceObject('CerealBox.PLY', ...
+            PlaceObject('Bowl.ply', ...
             [ 0 0 0]);
 
             %Plot the concrete ground
