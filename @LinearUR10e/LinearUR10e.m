@@ -25,15 +25,15 @@ classdef LinearUR10e < RobotBaseClass
             link(2) = Link('d',	0.1807,'a',       -0.01,'alpha', pi/2,'qlim', deg2rad([-360 360]), 'offset', 0);
             link(3) = Link('d', 0     ,'a',-0.6127,'alpha',     0,'qlim', deg2rad([-360 360]), 'offset', 0);
             link(4) = Link('d', 0     ,'a',-0.57155,'alpha',    0,'qlim', deg2rad([-360 360]), 'offset', 0);
-            link(5) = Link('d',0.17415,'a',       0,'alpha', pi/2,'qlim', deg2rad([-360 360]), 'offset', 0);
-            link(6) = Link('d',0.11985,'a',       0,'alpha',-pi/2,'qlim', deg2rad([-360,360]), 'offset', 0);
-            link(7) = Link('d',0.11655,'a',     0,'alpha',    0,'qlim', deg2rad([-360,360]), 'offset', 0);
+            link(5) = Link('d',0.17,'a',       0,'alpha', pi/2,'qlim', deg2rad([-360 360]), 'offset', 0);
+            link(6) = Link('d',0.117,'a',       0,'alpha',-pi/2,'qlim', deg2rad([-360,360]), 'offset', 0);
+            link(7) = Link('d',0.1125,'a',     0,'alpha',    0,'qlim', deg2rad([-360,360]), 'offset', 0);
             
             % Incorporate the joint limits of the UR10e inluding the rails
             link(1).qlim = [-0.8 -0.01];
             link(2).qlim = [-360 360];
-            link(3).qlim = [-90 90];
-            link(4).qlim = [-170 170];
+            link(3).qlim = [-360 360];
+            link(4).qlim = [-360 360];
             link(5).qlim = [-360 360];
             link(6).qlim = [-360 360];
             link(7).qlim = [-360 360];
