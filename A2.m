@@ -26,45 +26,49 @@
     state = 0;
     brekky = 0;
 
-    while(1)
-        state = app.State;
-        if app.ESTOPButton.Value
-            state = 99;
+    try
+        while(1)
+            state = app.State;
+            if app.ESTOPButton.Value
+                state = 99;
+            end
+    
+            switch state
+                case 0 % startup actions
+                    app.StatusLamp.Color = [0 0 0];
+                case 1 % jogging
+                    app.StatusLamp.Color = [0 0 1];
+                case 2 % breakfast
+                    app.StatusLamp.Color = [0 1 0];
+    
+                    % example of how to make the robots move
+                    switch brekky
+                        case 1
+                            r1Done = r1.Animate(cerealGreen.GetPose());
+                            r2Done = r2.Animate(transl(0,0,1));
+                            if r1Done && r2Done
+                                brekky = brekky+1;
+                            end
+                        case 2
+                            r1Done = r1.Animate(cerealGreen.GetPose());
+                            r2Done = r2.Animate(transl(0,0,1));
+                            if r1Done && r2Done
+                                brekky = brekky+1;
+                            end
+                    end
+    
+                case 99 % ESTOP
+                    app.StatusLamp.Color = [1 0 0];
+                    state = 0;
+            end
+    
+            pause(0.02)
         end
 
-        switch state
-            case 0 % startup actions
-                app.StatusLamp.Color = [0 0 0];
-            case 1 % jogging
-                app.StatusLamp.Color = [0 0 1];
-            case 2 % breakfast
-                app.StatusLamp.Color = [0 1 0];
-
-                % example of how to make the robots move
-                switch brekky
-                    case 1
-                        r1Done = r1.Animate(cerealGreen.GetPose());
-                        r2Done = r2.Animate(transl(0,0,1));
-                        if r1Done && r2Done
-                            brekky = brekky+1;
-                        end
-                    case 2
-                        r1Done = r1.Animate(cerealGreen.GetPose());
-                        r2Done = r2.Animate(transl(0,0,1));
-                        if r1Done && r2Done
-                            brekky = brekky+1;
-                        end
-                end
-
-            case 99 % ESTOP
-                app.StatusLamp.Color = [1 0 0];
-                state = 0;
-        end
-
-        pause(0.02)
+    catch
+        % cleanup
+        delete(app)
     end
-
-    % delete(app)
 % end
 
 function Cereal(box, r1, r2)
