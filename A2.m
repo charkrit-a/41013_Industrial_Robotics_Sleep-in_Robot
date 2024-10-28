@@ -20,7 +20,7 @@
     cerealRed = Entity("CerealBox_Red.ply", transl(-1.35,0.85,1.1)*trotz(pi/2));
 %%
     % start GUI
-    app = SleepInRobot;
+    app = SleepinRobot;
 
     % state
     state = 2;
