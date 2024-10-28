@@ -41,7 +41,6 @@ classdef LinearUR10e < RobotBaseClass
             %Offsets for links 3 and 5
             link(3).offset = -pi/2;
             link(5).offset = -pi/2;
-            link(7).offset = -pi/2;
             
             self.model = SerialLink(link,'name',self.name);
         end
