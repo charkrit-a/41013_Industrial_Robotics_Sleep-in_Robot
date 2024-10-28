@@ -29,18 +29,21 @@ classdef Robot < handle
             r.model.animate(q);
         end
 
-        function SetTarget(obj,tr,steps)
+        function SetTarget(obj,tr,qGuess,steps)
             %SETTARGET Set a end effector position target
             %   Accepts a global pose and generates a trajectory to reach
             %   that pose.
             if nargin < 3
+                qGuess = obj.qCurrent;
+            end
+            if nargin < 4
                 steps = 100;
             end
             
             obj.trTarget = tr;
             trWithOffset = tr/obj.endEffectorOffset;
-            % obj.qTarget = obj.r.model.ikine(tr, obj.qCurrent, 'mask', [1 1 1 0 0 0]);
-            obj.qTarget = obj.r.model.ikcon(trWithOffset, obj.qCurrent);
+            % obj.qTarget = obj.r.model.ikine(tr, qGuess, 'mask', [1 1 1 0 0 0]);
+            obj.qTarget = obj.r.model.ikcon(trWithOffset, qGuess);
             obj.qTraj = jtraj(obj.qCurrent,obj.qTarget,steps);
         end
 
