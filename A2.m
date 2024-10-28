@@ -5,12 +5,12 @@
     Init();
     hold on
     
+    % define environment
+    EnvironmentA2();
+    
     % plot robots
     r1 = Robot(LinearUR10e(transl(-0.3,0,0)), transl(0,0,0.1)*troty(-pi/2));
     r2 = Robot(UR3e(transl(0.5,0.2,0)*trotz(pi/2), true, 'gripper_2fg7_base'), transl(0,0,0.08), [0 -pi/2 pi/2 -pi/2 -pi/2 0]);
-
-    % define environment
-    EnvironmentA2();
 
     % place objects
     milk = Entity("Milk.ply", transl(-1.8,0.7,0.15));
@@ -27,7 +27,7 @@
     brekky = 1;
 
     while(1)
-        %state = app.State;
+        % state = app.State;
         if app.ESTOPButton.Value
             state = 99;
         end
@@ -43,10 +43,8 @@
                 % example of how to make the robots move
                 switch brekky
                     case 1
-                        qCerealGuess = [-0.5 1.5 -1 0 0 0 0];
-                        r1Done = r1.Animate(qCerealGuess);
+                        r1Done = r1.Animate(cerealGreen.GetPose());
                         r2Done = r2.Animate(transl(0,0,1));
-                        
                         if r1Done && r2Done
                             brekky = brekky+1;
                         end
@@ -56,16 +54,6 @@
                         if r1Done && r2Done
                             brekky = brekky+1;
                         end
-                    case 3
-                        b2X = 0.3;
-                        b2Y = 0.1765;
-                        b2Z = 0;
-                        cerealTablePos = [ b2X, b2Y, b2Z + 0.15];
-                        r1Done = r1.Animate(cerealTablePos);
-                        r2Done = r2.Animate(transl(0,0,1));
-                        if r1Done && r2Done
-                            brekky = brekky+1;
-                    end
                 end
 
             case 99 % ESTOP
