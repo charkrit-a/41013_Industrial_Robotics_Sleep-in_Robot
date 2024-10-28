@@ -29,6 +29,12 @@ classdef Robot < handle
             r.model.animate(q);
         end
 
+        function Teach(obj, q)
+            %TEACH animate specific q
+            obj.qCurrent = q;
+            obj.r.model.animate(obj.qCurrent);
+        end
+
         function SetTarget(obj,tr,qGuess,steps)
             %SETTARGET Set a end effector position target
             %   Accepts a global pose and generates a trajectory to reach
