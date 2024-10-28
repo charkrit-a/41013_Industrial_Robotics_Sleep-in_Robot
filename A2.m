@@ -12,8 +12,8 @@ function A2(app)
     r2 = Robot(UR3e(transl(0.5,0.2,0)*trotz(pi/2), true, 'gripper_2fg7_base'), transl(0,0,0.08), [0 -pi/2 pi/2 -pi/2 -pi/2 0]);
 
     % place objects
-    milk = Entity("Milk.ply", transl(-1.8,0.7,0.05));
-    juice = Entity("OrangeJuice.ply", transl(-1.8,0.8,0.05));
+    milk = Entity("Milk.ply", transl(-1.8,0.7,0.15));
+    juice = Entity("OrangeJuice.ply", transl(-1.8,0.8,0.15));
     cerealGreen = Entity("CerealBox_Green.ply", transl(-0.78,0.85,1.1)*trotz(pi/2));
     cerealPurple = Entity("CerealBox_Blue.ply", transl(-1.25,0.85,1.1)*trotz(pi/2));
     cerealRed = Entity("CerealBox_Red.ply", transl(-1.35,0.85,1.1)*trotz(pi/2));
