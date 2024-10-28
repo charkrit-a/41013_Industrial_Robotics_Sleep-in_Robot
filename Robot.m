@@ -2,7 +2,7 @@ classdef Robot < handle
     %ROBOT Wrapper for convenient use of robotics toolbox
     %   Helper and convenience functions for robotics toolbox
     
-    properties (Access=private)
+    properties (Access=public)
         r
         qCurrent
         qTarget
@@ -69,6 +69,7 @@ classdef Robot < handle
             end
 
             obj.qTarget = q;
+            obj.trTarget = obj.r.model.fkine(q);
             obj.qTraj = jtraj(obj.qCurrent, obj.qTarget, steps);
         end
 
