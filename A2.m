@@ -23,25 +23,34 @@
     app = SleepinRobot;
 
     % state
-    state = 2;
-    brekky = 1;
+    state = 0;
+    brekky = 0;
 
     while(1)
-        % state = app.State;
+        state = app.State;
         if app.ESTOPButton.Value
             state = 99;
         end
 
         switch state
-            case 0 % startup actions
+            case 0 % landing
                 app.StatusLamp.Color = [0 0 0];
             case 1 % jogging
                 app.StatusLamp.Color = [0 0 1];
             case 2 % breakfast
                 app.StatusLamp.Color = [0 1 0];
-
                 % example of how to make the robots move
                 switch brekky
+                    case 0
+                        if app.BreakfastApp.BreakfastGo
+                            brekky = 1;
+                            app.BreakfastApp.BreakfastGo = false;
+                        end
+                        if app.BreakfastApp.EnableBreakfastTimeSwitch.Value
+                            % if 
+                            %   brekky = 1;
+                            % end
+                        end
                     case 1
                         r1.SetTargetQ([-0.5 1.50 -1 0 0 0 0])
                         r2.SetTargetTr(transl(0,0,1))
@@ -54,7 +63,7 @@
                         r1.SetTargetTr(cerealGreen.GetPose());
                         r1Done = r1.Animate();
                         if r1Done
-                            brekky = brekky+1;
+                            brekky = 0;
                         end
                 end
 
