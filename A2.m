@@ -43,15 +43,17 @@
                 % example of how to make the robots move
                 switch brekky
                     case 1
-                        r1Done = r1.Animate(cerealGreen.GetPose());
-                        r2Done = r2.Animate(transl(0,0,1));
+                        r1.SetTargetQ([-0.5 1.50 -1 0 0 0 0])
+                        r2.SetTargetTr(transl(0,0,1))
+                        r1Done = r1.Animate();
+                        r2Done = r2.Animate();
                         if r1Done && r2Done
                             brekky = brekky+1;
                         end
                     case 2
-                        r1Done = r1.Animate(cerealGreen.GetPose());
-                        r2Done = r2.Animate(transl(0,0,1));
-                        if r1Done && r2Done
+                        r1.SetTargetTr(cerealGreen.GetPose());
+                        r1Done = r1.Animate();
+                        if r1Done
                             brekky = brekky+1;
                         end
                 end

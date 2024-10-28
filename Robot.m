@@ -24,6 +24,7 @@ classdef Robot < handle
 
             obj.r = r;
             obj.qCurrent = q;
+            obj.qTarget = q;
             obj.endEffectorOffset = endEffectorOffset;
             obj.trTarget = r.model.fkine(obj.qCurrent);
             r.model.animate(q);
@@ -35,7 +36,7 @@ classdef Robot < handle
             obj.r.model.animate(obj.qCurrent);
         end
 
-        function SetTarget(obj,tr,qGuess,steps)
+        function SetTargetTr(obj,tr,qGuess,steps)
             %SETTARGET Set a end effector position target
             %   Accepts a global pose and generates a trajectory to reach
             %   that pose.
@@ -45,17 +46,34 @@ classdef Robot < handle
             if nargin < 4
                 steps = 100;
             end
+
+            if obj.trTarget == tr
+                return
+            end
             
             obj.trTarget = tr;
             trWithOffset = tr/obj.endEffectorOffset;
             % obj.qTarget = obj.r.model.ikine(tr, qGuess, 'mask', [1 1 1 0 0 0]);
             obj.qTarget = obj.r.model.ikcon(trWithOffset, qGuess);
-            obj.qTraj = jtraj(obj.qCurrent,obj.qTarget,steps);
+            obj.qTraj = jtraj(obj.qCurrent, obj.qTarget, steps);
+        end
+
+        function SetTargetQ(obj,q,steps)
+            %SETTARGET Set a joint position target
+            if nargin < 3
+                steps = 100;
+            end
+            
+            if obj.qTarget == q
+                return
+            end
+
+            obj.qTarget = q;
+            obj.qTraj = jtraj(obj.qCurrent, obj.qTarget, steps);
         end
 
         function StepArm(obj)
-            obj.qCurrent = obj.qTraj(1,:);
-            obj.r.model.animate(obj.qTraj(1,:));
+            obj.Teach(obj.qTraj(1,:));
             obj.qTraj(1,:) = [];
             drawnow;
         end
@@ -63,22 +81,14 @@ classdef Robot < handle
         function StepFingers(obj)
         end
         
-        function status = Animate(obj,tr,entity)
+        function status = Animate(obj,entity)
             %ANIMATE Move the robot arm end effector to a pose
             %   Detailed explanation goes here
             if nargin < 2
-                tr = obj.trTarget;
-            end
-            if nargin < 3
                 entity = "none";
             end 
 
             status = false;
-
-            if any(obj.trTarget ~= tr, 'all')
-                obj.SetTarget(tr);
-                return
-            end
 
             if isempty(obj.qTraj)
                 status = true;
