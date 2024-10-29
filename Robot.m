@@ -36,6 +36,41 @@ classdef Robot < handle
             obj.r.model.animate(obj.qCurrent);
         end
 
+        function Jog(obj, input)
+            %JOG Manually jog the robot
+            % input [vx;vy;vz;wx;wy;wz]
+            
+            % simulation time step
+            dt = 0.15;
+
+            % turn joystick input into an end-effector velocity command
+            Kv = 0.3; % linear velocity gain
+            Kw = 0.8; % angular velocity gain
+            
+            vx = Kv*input(1);
+            vy = Kv*input(2);
+            vz = Kv*input(3);
+            
+            wx = Kw*input(4);
+            wy = Kw*input(5);
+            wz = Kw*input(6);
+            
+            dx = [vx;vy;vz;wx;wy;wz]; % combined velocity vector
+            
+            % use DLS J inverse to calculate joint velocity
+            lambda = 0.5;
+            J = obj.r.model.jacob0(obj.qCurrent);
+            [~,n] = size(J);
+            Jinv_dls = inv((J'*J)+lambda^2*eye(n))*J';
+            dq = Jinv_dls*dx;
+            
+            % apply joint velocity to step robot joint angles 
+            q = obj.qCurrent + dq'*dt;
+
+            % animate the robot
+            obj.Teach(q);
+        end
+
         function SetTargetTr(obj,tr,qGuess,steps)
             %SETTARGET Set a end effector position target
             %   Accepts a global pose and generates a trajectory to reach

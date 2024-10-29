@@ -1,5 +1,6 @@
 % function A2
 %%
+    clear
     clf
     clc
     Init();
@@ -21,7 +22,7 @@
     bowl = Entity("Bowl.ply", transl(0.5,-0.1,0));
 %%
     % start GUI
-    app = SleepinRobot;
+    app = SleepinRobot(r1,r2);
 
     % state
     state = 0;
