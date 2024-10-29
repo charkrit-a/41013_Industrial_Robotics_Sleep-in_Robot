@@ -98,7 +98,7 @@
                         r1.SetTargetTr(transl(0.1, 0.1, 0.05))
                         r1Done = r1.Animate(milk);
                         if r1Done
-                            brekky = brekky+1;
+                            brekky = 0; % last step should return to 0
                         end
                 end
 
