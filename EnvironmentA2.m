@@ -88,6 +88,9 @@ function EnvironmentA2()
     %E-Stop Button
     PlaceObject('Emergency_Stop_Button.PLY', ...
     [ 1.7 -1 0.5]);
+
+    %Beacon
+    PlaceObject('AmberBeacon.ply', [1.6 Y+YSignOffset 1.35]);
     
     %Plot the concrete ground
     set(0,'DefaultFigureWindowStyle','docked');
