@@ -25,8 +25,8 @@
     app = SleepinRobot(r1,r2);
 
     % state
-    state = 2;
-    brekky = 1;
+    state = 0;
+    brekky = 0;
 
     while(1)
         %state = app.State;
