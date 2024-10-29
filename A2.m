@@ -29,7 +29,7 @@
     brekky = 0;
 
     while(1)
-        %state = app.State;
+        state = app.State;
         if app.ESTOPButton.Value
             state = 99;
         end
