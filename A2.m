@@ -1,5 +1,6 @@
 % function A2
 %%
+    clear
     clf
     clc
     Init();
@@ -21,7 +22,7 @@
     bowl = Entity("Bowl.ply", transl(0.5,-0.1,0));
 %%
     % start GUI
-    app = SleepinRobot;
+    app = SleepinRobot(r1,r2);
 
     % state
     state = 2;
@@ -104,7 +105,7 @@
                         r1.SetTargetQ([-0.8 4*pi/5 -pi/4 -pi/2 -pi/4 -2*pi/5 -pi/2])
                         r1Done = r1.Animate(milk);
                         if r1Done
-                            brekky = brekky+1;
+                            brekky = 0; % last step should return to 0
                         end
                     case 9 %Ur10e moves to place the milk carton on the table and UR3 moves cereal box to pour into the bowl
                         r1.SetTargetTr(transl(0.1, 0, 0.05))
