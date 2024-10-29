@@ -31,7 +31,7 @@ function EnvironmentA2()
     %Number of Fences Calculated to fit each axis completely
     fenceNumZ = 4;
     fenceNumX = round(lengthOfBorderX/lengthofFence);
-    fenceNumY = round(lengthOfBorderY/lengthofFence);
+    fenceNumY = round(lengthOfBorderY/lengthofFence)-1;
     
     %Fence Wall at y-axis at x = 1.2
     for j = 1:fenceNumY
@@ -48,7 +48,37 @@ function EnvironmentA2()
             set(fenceX(i+fenceNumZ*(j-1)),'Vertices',verts(:,1:3))
         end
     end
+    %Plot Light Curtains
+    LC1 = PlaceObject('Light_Curtain.ply', ...
+    [XLowerAxis+lengthOfBorderX -(ZLowerAxis+1.35) YUpperAxis-lengthOfBorderY]);
+    verts = [get(LC1,'Vertices'), ones(size(get(LC1,'Vertices'),1),1)]* trotx(pi/2);
+    verts(:,1) = verts(:,1);
+    verts(:,2) = verts(:,2);
+    verts(:,3) = verts(:,3);
+    set(LC1,'Vertices',verts(:,1:3))
+
+    LC2 = PlaceObject('Light_Curtain.ply', ...
+    [XLowerAxis+lengthOfBorderX ZLowerAxis+0.15 -(YUpperAxis-lengthOfBorderY+lengthofFence+0.05)]);
+    verts = [get(LC2,'Vertices'), ones(size(get(LC2,'Vertices'),1),1)]* trotx(-pi/2);
+    verts(:,1) = verts(:,1);
+    verts(:,2) = verts(:,2);
+    verts(:,3) = verts(:,3);
+    set(LC2,'Vertices',verts(:,1:3))
     
+    laserNum = 20;
+    lightFenceHeight = fenceNumZ*heightofFence-0.2;
+    laserSeparation = lightFenceHeight/laserNum;
+
+    for k = 1:laserNum
+        startX(k) = XLowerAxis+lengthOfBorderX;
+        startY(k) = YUpperAxis-lengthOfBorderY;
+        startZ(k) = ZLowerAxis+0.05+laserSeparation*(k-1);
+        endX(k) = XLowerAxis+lengthOfBorderX;
+        endY(k) = YUpperAxis-lengthOfBorderY+lengthofFence;
+        endZ(k) = ZLowerAxis+0.05+laserSeparation*(k-1);
+        line(k) = plot3([startX(k),endX(k)], [startY(k),endY(k)], [startZ(k),endZ(k)], 'r-');
+    end
+
     %Plot Kitchen
     PlaceObject('Kitchen.PLY', ...
     [ XLowerAxis YUpperAxis ZLowerAxis]);
@@ -119,6 +149,7 @@ function EnvironmentA2()
     [ 2.5+X 0+Y ZLowerAxis]);
     PlaceObject('Worker.ply', ...
     [ 2.5+X -1+Y ZLowerAxis]);
+    
     % fire extinguisher
     PlaceObject('FireExtinguisherCO2.ply', ...
     [ 1.9+X 0.9+Y ZLowerAxis]);

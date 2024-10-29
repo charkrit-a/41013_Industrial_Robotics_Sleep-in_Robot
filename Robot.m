@@ -117,11 +117,15 @@ classdef Robot < handle
         function StepFingers(obj)
         end
         
-        function status = Animate(obj,entity)
+        function status = Animate(obj,entity,rotation)
             %ANIMATE Move the robot arm end effector to a pose
             %   Detailed explanation goes here
+            if nargin < 3
+                rotation = 1;
+            end
             if nargin < 2
                 entity = "none";
+                rotation = 1;
             end 
 
             status = false;
@@ -133,7 +137,7 @@ classdef Robot < handle
 
             obj.StepArm();
             if entity ~= "none"
-                trEntity = obj.r.model.fkine(obj.qCurrent).T * obj.endEffectorOffset;
+                trEntity = obj.r.model.fkine(obj.qCurrent).T * obj.endEffectorOffset * rotation;
                 entity.Move(trEntity);
             end 
         end
