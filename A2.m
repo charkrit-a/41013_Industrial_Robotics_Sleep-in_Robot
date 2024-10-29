@@ -142,14 +142,14 @@
                             brekky = brekky+1;
                         end
                     case 13 %Ur10e moves to predetermined joint positions before picking up cereal box and UR3 moves cereal box to pour into the bowl
-                        r1.SetTargetQ([-0.45 0 1 -1 0 -1.5 pi/2])
+                        r1.SetTargetQ([-0.3 0 0.2 -1 0 -1.5 pi/2])
                         r2.SetTargetQ([-2*pi/3 -pi/3 pi/2 0 0 0])
                         r1Done = r1.Animate(cerealGreen);
                         r2Done = r2.Animate(milk,trotx(-pi/2));
                         if r1Done && r2Done
                             brekky = brekky+1;
                         end
-                    case 14 %Ur10e moves to Cereal Box
+                    case 14 %Ur10e moves to Cereal Box Original Position
                         r1.SetTargetTr(transl(-0.65,0.85,1.1)*trotz(pi/2));
                         r2.SetTargetTr(transl(0, 0.06, 0.05)*trotx(pi/2));
                         r1Done = r1.Animate(cerealGreen);
@@ -166,7 +166,7 @@
                             brekky = brekky+1;
                         end
                     case 16 %Ur10e moves to place the milk carton on the table and UR3 moves cereal box to pour into the bowl
-                        r1.SetTargetTr(transl(0.1, 0, 0.05))
+                        r1.SetTargetTr(transl(0, 0.06, 0.05))
                         r1Done = r1.Animate();
                         if r1Done
                             brekky = brekky+1;

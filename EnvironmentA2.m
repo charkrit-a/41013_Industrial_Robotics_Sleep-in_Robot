@@ -79,6 +79,20 @@ function EnvironmentA2()
         line(k) = plot3([startX(k),endX(k)], [startY(k),endY(k)], [startZ(k),endZ(k)], 'r-');
     end
 
+    planeNormal = [-1,0,0];
+    planePoint = [XLowerAxis+lengthOfBorderX-0.01,0,0];
+
+    lineStartPoint = [-0.5,0,0];
+    lineEndPoint = [3.5,0,0];
+
+    [intersectionPoints,check] = LinePlaneIntersection(planeNormal,planePoint,lineStartPoint,lineEndPoint);
+    intersectionPoints;
+    check;
+    [Y1,Z1] = meshgrid(-2:0.1:(YUpperAxis-lengthOfBorderY+lengthofFence),ZLowerAxis:0.1:lightFenceHeight+ZLowerAxis);
+    X1 = repmat(XLowerAxis+lengthOfBorderX,size(Y1,1),size(Y1,2));
+    surf(X1,Y1,Z1,'FaceAlpha',0.01);
+    hold on;
+
     %Plot Kitchen
     PlaceObject('Kitchen.PLY', ...
     [ XLowerAxis YUpperAxis ZLowerAxis]);
