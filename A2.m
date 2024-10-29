@@ -24,11 +24,11 @@
     app = SleepinRobot;
 
     % state
-    state = 0;
-    brekky = 0;
+    state = 2;
+    brekky = 1;
 
     while(1)
-        state = app.State;
+        %state = app.State;
         if app.ESTOPButton.Value
             state = 99;
         end
@@ -73,13 +73,13 @@
                             brekky = brekky+1;
                         end
                     case 4 %UR10e places cereal box on the table    
-                        r1.SetTargetTr(transl(-0.1, 0, 0.07))
+                        r1.SetTargetTr(transl(-0.1, 0.2, 0.07))
                         r1Done = r1.Animate(cerealGreen);
                         if r1Done
                             brekky = brekky+1;
                         end
-                    case 5  %UR10e  and UR3 moves to predetermined joint positions before picking up cereal box   
-                        r1.SetTargetQ([-0.5, pi/4, pi/4 pi/4 pi/2 pi/4 -pi/2]);
+                    case 5  %UR10e moves to predetermined joint positions before picking up milk and UR3 moves to predetermined joint positions before picking up cereal box   
+                        r1.SetTargetQ([-0.01, pi/4, pi/4 pi/4 pi/2 pi/4 -pi/2]);
                         r2.SetTargetQ([-8*pi/16 -pi/4 pi/2 pi 0 0])
                         r1Done = r1.Animate();
                         r2Done = r2.Animate();
@@ -88,18 +88,79 @@
                         end
                     case 6 %UR10e moves to the milk carton and UR3 moves to cereal box
                         r1.SetTargetTr(milk.GetPose());
-                        r2.SetTargetTr(transl(0.1, 0, 0.07)*troty(pi/2))
+                        r2.SetTargetTr(transl(0.1, 0.2, 0.07)*troty(pi/2))
                         r1Done = r1.Animate();
                         r2Done = r2.Animate();
                         if r1Done && r2Done
                             brekky = brekky+1;
                         end
                     case 7 %Ur10e moves to place the milk carton on the table and UR3 moves cereal box to pour into the bowl
-                        r1.SetTargetTr(transl(0.1, 0.1, 0.05))
+                        r1.SetTargetQ([-0.01, pi/4, pi/4 pi/4 pi/2 pi/4 -pi/2])
+                        r1Done = r1.Animate(milk);
+                        if r1Done
+                            brekky = brekky+1;
+                        end 
+                    case 8 %Ur10e moves to place the milk carton on the table and UR3 moves cereal box to pour into the bowl
+                        r1.SetTargetQ([-0.8 4*pi/5 -pi/4 -pi/2 -pi/4 -2*pi/5 -pi/2])
                         r1Done = r1.Animate(milk);
                         if r1Done
                             brekky = brekky+1;
                         end
+                    case 9 %Ur10e moves to place the milk carton on the table and UR3 moves cereal box to pour into the bowl
+                        r1.SetTargetTr(transl(0.1, 0, 0.05))
+                        r1Done = r1.Animate(milk);
+                        if r1Done
+                            brekky = brekky+1;
+                        end
+                    case 10 %Ur10e moves to predetermined joint positions before picking up cereal box and UR3 moves cereal box to pour into the bowl
+                        r1.SetTargetQ([-0.8 4*pi/5 -pi/4 -pi/2 -pi/4 -2*pi/5 -pi/2])
+                        r1Done = r1.Animate();
+                        if r1Done
+                            brekky = brekky+1;
+                        end
+                    case 11 %Ur10e moves to predetermined joint positions before picking up cereal box and UR3 moves cereal box to pour into the bowl
+                        r1.SetTargetTr(milk.GetPose())
+                        r1Done = r1.Animate();
+                        if r1Done
+                            brekky = brekky+1;
+                        end
+                    case 12 %Ur10e moves to predetermined joint positions before picking up cereal box and UR3 moves cereal box to pour into the bowl
+                        r1.SetTargetQ([-0.45 0 1 -1 0 -1.5 pi/2])
+                        r1Done = r1.Animate(cerealGreen);
+                        if r1Done
+                            brekky = brekky+1;
+                        end
+                    case 13 %Ur10e moves to Cereal Box
+                        r1.SetTargetTr(transl(-0.65,0.85,1.1)*trotz(pi/2));
+                        r1Done = r1.Animate(cerealGreen);
+                        if r1Done
+                            brekky = brekky+1;
+                        end
+                    case 14 %Ur10e moves to place the milk carton on the table and UR3 moves cereal box to pour into the bowl
+                        r1.SetTargetQ([-0.8 4*pi/5 -pi/4 -pi/2 -pi/4 -2*pi/5 -pi/2])
+                        r1Done = r1.Animate();
+                        if r1Done
+                            brekky = brekky+1;
+                        end
+                    case 15 %Ur10e moves to place the milk carton on the table and UR3 moves cereal box to pour into the bowl
+                        r1.SetTargetTr(transl(0.1, 0, 0.05))
+                        r1Done = r1.Animate();
+                        if r1Done
+                            brekky = brekky+1;
+                        end
+                    case 16 %Ur10e moves to predetermined joint positions before picking up cereal box and UR3 moves cereal box to pour into the bowl
+                        r1.SetTargetQ([-0.8 4*pi/5 -pi/4 -pi/2 -pi/4 -2*pi/5 -pi/2])
+                        r1Done = r1.Animate(milk);
+                        if r1Done
+                            brekky = brekky+1;
+                        end
+                    case 17 %Ur10e moves to predetermined joint positions before picking up cereal box and UR3 moves cereal box to pour into the bowl
+                        r1.SetTargetTr(transl(-1.8,0.7,0.15))
+                        r1Done = r1.Animate(milk);
+                        if r1Done
+                            brekky = brekky+1;
+                        end
+
                 end
 
             case 99 % ESTOP
