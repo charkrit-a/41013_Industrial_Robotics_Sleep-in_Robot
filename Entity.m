@@ -4,9 +4,12 @@ classdef Entity < handle
     
     properties (Access=private)
         pose;
-        mesh_h;
         vertCount;
         verts;
+    end
+
+    properties (Access=public)
+        mesh_h;
     end
     
     methods

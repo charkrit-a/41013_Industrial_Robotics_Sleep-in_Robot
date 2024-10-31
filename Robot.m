@@ -2,7 +2,7 @@ classdef Robot < handle
     %ROBOT Wrapper for convenient use of robotics toolbox
     %   Helper and convenience functions for robotics toolbox
     
-    properties (Access=public)
+    properties (Access=private)
         r
         qCurrent
         qTarget
@@ -46,7 +46,15 @@ classdef Robot < handle
             % calculate all links using DH parameters
             tr(:,:,1) = baseTr;
             for i = 1 : n
-                tr(:,:,i+1) = tr(:,:,i) * trotz(q(i)+L(i).offset) * transl(0,0,L(i).d) * transl(L(i).a,0,0) * trotx(L(i).alpha);
+                if L(i).isrevolute
+                    tr(:,:,i+1) = tr(:,:,i) * trotz(q(i)+L(i).offset) * transl(0,0,L(i).d) * transl(L(i).a,0,0) * trotx(L(i).alpha);
+                else
+                    tr(:,:,i+1) = tr(:,:,i) * trotz(L(i).offset) * trotz(pi) * transl(0, 0, q(i)) * transl(L(i).a, 0, 0) * trotx(L(i).alpha);
+                end
+            end
+
+            for i = 1 : n+1
+                % plot3(tr(1,4,i),tr(2,4,i),tr(3,4,i),'x','MarkerSize',10,'Color','r');
             end
         end 
 
@@ -89,6 +97,51 @@ classdef Robot < handle
 
             % animate the robot
             obj.Teach(q);
+        end
+
+        function result = DetectCollision(obj, entity, q)
+            %DETECTCOLLISION detects a collision with any mesh object
+            if nargin < 3
+                q = obj.qCurrent;
+            end
+
+            mesh_h = entity.mesh_h;
+
+            result = false;
+            linkTransforms = obj.Fkine(q); % Get link start and end points
+            numLinks = size(linkTransforms,3);
+            numFaces = size(mesh_h.Faces, 1);
+            verts = zeros(3,1,3);
+
+            % iterate through each of the links
+            for i = 1 : numLinks-1
+                % Define the line segment for this link
+                lineStart = linkTransforms(1:3,4,i);
+                lineEnd = linkTransforms(1:3,4,i+1);
+
+                % Iterate through each triangle of the mesh
+                for j = 1:numFaces
+                    % Get vertices of the j-th triangle face
+                    verts(:,1) = mesh_h.Vertices(mesh_h.Faces(j, 1), :)';
+                    verts(:,2) = mesh_h.Vertices(mesh_h.Faces(j, 2), :)';
+                    verts(:,3) = mesh_h.Vertices(mesh_h.Faces(j, 3), :)';
+                    
+                    % Plot each vertex of the triangle face
+                    % plot3(verts(1,:), verts(2,:), verts(3,:), 'o', 'MarkerSize', 10, 'Color', 'b');
+
+                    % Calculate plane normal and point
+                    planeNormal = cross(verts(:,:,2) - verts(:,:,1), verts(:,:,3) - verts(:,:,1));
+                    planePoint = verts(:,:,1);
+                    
+                    [intersectP,check] = LinePlaneIntersection(planeNormal',planePoint',lineStart',lineEnd'); 
+                    
+                    if check && IsIntersectionPointInsideTriangle(intersectP, verts) && IsPointOnSegment(intersectP', lineStart, lineEnd)
+                        % plot3(intersectP(:,1),intersectP(:,2),intersectP(:,3), '*', 'MarkerSize', 10, 'Color', 'k');
+                        result = true;
+                        % return
+                    end
+                end    
+            end
         end
 
         function SetTargetTr(obj,tr,qGuess,steps)
@@ -183,4 +236,76 @@ function q = GenerateInitialQ(robot)
             q(i) = 0;  % Default value if no limits are set
         end
     end
+end
+
+function [intersectionPoint,check] = LinePlaneIntersection(planeNormal,pointOnPlane,point1OnLine,point2OnLine)
+    %LINEPLANEINTERSECTION checks for intersections with a plane
+
+    intersectionPoint = [0 0 0];
+    u = point2OnLine - point1OnLine;
+    w = point1OnLine - pointOnPlane;
+    D = dot(planeNormal,u);
+    N = -dot(planeNormal,w);
+    check = 0; %#ok<NASGU>
+    if abs(D) < 10^-7        % The segment is parallel to plane
+        if N == 0           % The segment lies in plane
+            check = 2;
+            return
+        else
+            check = 0;       %no intersection
+            return
+        end
+    end
+    
+    %compute the intersection parameter
+    sI = N / D;
+    intersectionPoint = point1OnLine + sI.*u;
+    
+    if (sI < 0 || sI > 1)
+        check= 3;          %The intersection point  lies outside the segment, so there is no intersection
+    else
+        check=1;
+    end
+end
+
+function result = IsIntersectionPointInsideTriangle(intersectP,triangleVerts)
+    %ISINTERSECTIONPOINTINSIDETRIANGLE checks if a point lies within a triangle
+
+    u = triangleVerts(2,:) - triangleVerts(1,:);
+    v = triangleVerts(3,:) - triangleVerts(1,:);
+    
+    uu = dot(u,u);
+    uv = dot(u,v);
+    vv = dot(v,v);
+    
+    w = intersectP - triangleVerts(1,:);
+    wu = dot(w,u);
+    wv = dot(w,v);
+    
+    D = uv * uv - uu * vv;
+    
+    % Get and test parametric coords (s and t)
+    s = (uv * wv - vv * wu) / D;
+    if (s < 0.0 || s > 1.0)        % intersectP is outside Triangle
+        result = 0;
+        return;
+    end
+    
+    t = (uv * wu - uu * wv) / D;
+    if (t < 0.0 || (s + t) > 1.0)  % intersectP is outside Triangle
+        result = 0;
+        return;
+    end
+    
+    result = 1;                      % intersectP is in Triangle
+end
+
+function result = IsPointOnSegment(point, lineStart, lineEnd, tolerance)
+    %ISPOINTONSEGMENT Check if a point lies on a line segment in 3D.
+    if nargin < 4
+        tolerance = 1e-6;
+    end
+    
+    result = all(point >= min(lineStart, lineEnd) - tolerance) && ...
+                  all(point <= max(lineStart, lineEnd) + tolerance);
 end
