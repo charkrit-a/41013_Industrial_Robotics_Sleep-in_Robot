@@ -9,12 +9,16 @@ classdef Robot < handle
         qTraj
         trTarget
         endEffectorOffset
+        collideables
     end
     
     methods
-        function obj = Robot(r,endEffectorOffset,q)
+        function obj = Robot(r,endEffectorOffset,q,collideables)
             %ROBOT Construct an instance of this class
             %   Detailed explanation goes here
+            if nargin < 4
+                collideables = "none";
+            end
             if nargin < 3
                 q = GenerateInitialQ(r);
             end
@@ -28,6 +32,7 @@ classdef Robot < handle
             obj.endEffectorOffset = endEffectorOffset;
             obj.trTarget = r.model.fkine(obj.qCurrent);
             r.model.animate(q);
+            obj.collideables = collideables;
         end
 
         function tr = Fkine(obj, q)
@@ -99,13 +104,11 @@ classdef Robot < handle
             obj.Teach(q);
         end
 
-        function result = DetectCollision(obj, entity, q)
+        function result = DetectCollision(obj, mesh_h, q)
             %DETECTCOLLISION detects a collision with any mesh object
             if nargin < 3
                 q = obj.qCurrent;
             end
-
-            mesh_h = entity.mesh_h;
 
             result = false;
             linkTransforms = obj.Fkine(q); % Get link start and end points
@@ -144,7 +147,7 @@ classdef Robot < handle
             end
         end
 
-        function SetTargetTr(obj,tr,qGuess,steps)
+        function result = SetTargetTr(obj,tr,qGuess,steps)
             %SETTARGET Set a end effector position target
             %   Accepts a global pose and generates a trajectory to reach
             %   that pose.
@@ -155,7 +158,10 @@ classdef Robot < handle
                 steps = 100;
             end
 
-            if obj.trTarget == tr
+            result = false;
+
+            if all(obj.trTarget == tr) && ~isempty(obj.qTraj)
+                result = true;
                 return
             end
             
@@ -163,31 +169,62 @@ classdef Robot < handle
             trWithOffset = tr/obj.endEffectorOffset;
             % obj.qTarget = obj.r.model.ikine(tr, qGuess, 'mask', [1 1 1 0 0 0]);
             obj.qTarget = obj.r.model.ikcon(trWithOffset, qGuess);
-            obj.qTraj = jtraj(obj.qCurrent, obj.qTarget, steps);
+            traj = jtraj(obj.qCurrent, obj.qTarget, steps);
+
+            obj.qTraj = [];
+            
+            % check for collisions along this path
+            if obj.collideables ~= "none"
+                for i = 1:size(obj.collideables,1)
+                    for j = 1:size(traj,1)
+                        if obj.DetectCollision(obj.collideables(i), traj(j,:))
+                            return
+                        end
+                    end
+                end
+            end
+
+            result = true;
+            obj.qTraj = traj;
         end
 
-        function SetTargetQ(obj,q,steps)
+        function result = SetTargetQ(obj,q,steps)
             %SETTARGET Set a joint position target
             if nargin < 3
                 steps = 100;
             end
+
+            result = false;
             
-            if obj.qTarget == q
+            if all(obj.qTarget == q) && ~isempty(obj.qTraj)
+                result = true;
                 return
             end
 
             obj.qTarget = q;
             obj.trTarget = obj.r.model.fkine(q);
-            obj.qTraj = jtraj(obj.qCurrent, obj.qTarget, steps);
+            traj = jtraj(obj.qCurrent, obj.qTarget, steps);
+            obj.qTraj = [];
+            
+            % check for collisions along this path
+            if obj.collideables ~= "none"
+                for i = 1:size(obj.collideables,1)
+                    for j = 1:size(traj,1)
+                        if obj.DetectCollision(obj.collideables(i), traj(j,:))
+                            return
+                        end
+                    end
+                end
+            end
+
+            result = true;
+            obj.qTraj = traj;
         end
 
         function StepArm(obj)
             obj.Teach(obj.qTraj(1,:));
             obj.qTraj(1,:) = [];
             drawnow;
-        end
-
-        function StepFingers(obj)
         end
         
         function status = Animate(obj,entity,rotation)

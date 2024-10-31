@@ -1,4 +1,4 @@
-function EnvironmentA2()    
+function CollideableMeshes = EnvironmentA2()    
     % ENVIRONMENTA2 renders the environment for assessment2
     
     X = -0.3;
@@ -36,20 +36,20 @@ function EnvironmentA2()
     %Fence Wall at y-axis at x = 1.2
     for j = 1:fenceNumY
         for i = 1:fenceNumZ
-            fenceY(i+fenceNumZ*(j-1)) = PlaceObject('fenceFinal.ply',[lengthOfBorderX + XLowerAxis, YUpperAxis - fenceOffset - lengthofFence * (j-1), ZLowerAxis + (i-1)*heightofFence]);
+            fenceY(i+fenceNumZ*(j-1)) = PlantObject('fenceFinal.ply',[lengthOfBorderX + XLowerAxis, YUpperAxis - fenceOffset - lengthofFence * (j-1), ZLowerAxis + (i-1)*heightofFence]);
         end
     end
     
     %Fence Wall along x-axis at y = -1.2m
     for j = 1:fenceNumX
         for i = 1:fenceNumZ
-            fenceX(i+fenceNumZ*(j-1)) = PlaceObject('fenceFinal.ply',[ -(YUpperAxis - lengthOfBorderY), XLowerAxis + fenceOffset + lengthofFence * (j-1), ZLowerAxis + (i-1)*heightofFence]);
+            fenceX(i+fenceNumZ*(j-1)) = PlantObject('fenceFinal.ply',[ -(YUpperAxis - lengthOfBorderY), XLowerAxis + fenceOffset + lengthofFence * (j-1), ZLowerAxis + (i-1)*heightofFence]);
             verts = [get(fenceX(i+fenceNumZ*(j-1)),'Vertices'), ones(size(get(fenceX(i+fenceNumZ*(j-1)),'Vertices'),1),1)] * trotz(pi/2);
             set(fenceX(i+fenceNumZ*(j-1)),'Vertices',verts(:,1:3))
         end
     end
     %Plot Light Curtains
-    LC1 = PlaceObject('Light_Curtain.ply', ...
+    LC1 = PlantObject('Light_Curtain.ply', ...
     [XLowerAxis+lengthOfBorderX -(ZLowerAxis+1.35) YUpperAxis-lengthOfBorderY]);
     verts = [get(LC1,'Vertices'), ones(size(get(LC1,'Vertices'),1),1)]* trotx(pi/2);
     verts(:,1) = verts(:,1);
@@ -57,7 +57,7 @@ function EnvironmentA2()
     verts(:,3) = verts(:,3);
     set(LC1,'Vertices',verts(:,1:3))
 
-    LC2 = PlaceObject('Light_Curtain.ply', ...
+    LC2 = PlantObject('Light_Curtain.ply', ...
     [XLowerAxis+lengthOfBorderX ZLowerAxis+0.15 -(YUpperAxis-lengthOfBorderY+lengthofFence+0.05)]);
     verts = [get(LC2,'Vertices'), ones(size(get(LC2,'Vertices'),1),1)]* trotx(-pi/2);
     verts(:,1) = verts(:,1);
@@ -94,11 +94,11 @@ function EnvironmentA2()
     hold on;
 
     %Plot Kitchen
-    PlaceObject('Kitchen.PLY', ...
+    t = PlantObject('Kitchen.PLY', ...
     [ XLowerAxis YUpperAxis ZLowerAxis]);
 
     %Plot the Kitchen Table
-    t1 = PlaceObject('kitchenTable.ply',[0, 0, 0]);
+    t1 = PlantObject('kitchenTable.ply',[0, 0, 0]);
     verts = [get(t1,'Vertices'), ones(size(get(t1,'Vertices'),1),1)]* trotx(-pi/2);
     verts(:,1) = verts(:,1) *0.001;
     verts(:,2) = verts(:,2) *0.0008;
@@ -106,7 +106,7 @@ function EnvironmentA2()
     set(t1,'Vertices',verts(:,1:3))
     
     %Plot the Laptop table 
-    t2 = PlaceObject('computerTable.ply',[10*(1.7)/0.008, 10*0.25/0.008, 10*0/0.008]);
+    t2 = PlantObject('computerTable.ply',[10*(1.7)/0.008, 10*0.25/0.008, 10*0/0.008]);
     verts = [get(t2,'Vertices'), ones(size(get(t2,'Vertices'),1),1)]* trotx(-pi/2);
     verts(:,1) = verts(:,1)*0.0008;
     verts(:,2) = verts(:,2)*0.0008;
@@ -114,7 +114,7 @@ function EnvironmentA2()
     set(t2,'Vertices',verts(:,1:3))
     
     %Plot the Emergency Stop table 
-    t3 = PlaceObject('computerTable.ply',[10*(1.7)/0.008, 10*0.25/0.008, 10*(1)/0.008]);
+    t3 = PlantObject('computerTable.ply',[10*(1.7)/0.008, 10*0.25/0.008, 10*(1)/0.008]);
     verts = [get(t3,'Vertices'), ones(size(get(t3,'Vertices'),1),1)]* trotx(-pi/2);
     verts(:,1) = verts(:,1)*0.0008;
     verts(:,2) = verts(:,2)*0.0008;
@@ -122,7 +122,7 @@ function EnvironmentA2()
     set(t3,'Vertices',verts(:,1:3))
     
     %Plot Laptop
-    l1 = PlaceObject('Laptop.ply',[10*(1.6)/0.008, 10*0/0.008, 10*0.5/0.008]);
+    l1 = PlantObject('Laptop.ply',[10*(1.6)/0.008, 10*0/0.008, 10*0.5/0.008]);
     verts = [get(l1,'Vertices'), ones(size(get(l1,'Vertices'),1),1)];
     verts(:,1) = verts(:,1)*0.0008;
     verts(:,2) = verts(:,2)*0.0008;
@@ -130,11 +130,11 @@ function EnvironmentA2()
     set(l1,'Vertices',verts(:,1:3))
 
     %E-Stop Button
-    PlaceObject('Emergency_Stop_Button.PLY', ...
+    PlantObject('Emergency_Stop_Button.PLY', ...
     [ 1.7 -1 0.5]);
 
     %Beacon
-    PlaceObject('AmberBeacon.ply', [1.6 Y+YSignOffset 1.35]);
+    PlantObject('AmberBeacon.ply', [1.6 Y+YSignOffset 1.35]);
     
     %Plot the concrete ground
     set(0,'DefaultFigureWindowStyle','docked');
@@ -159,13 +159,13 @@ function EnvironmentA2()
     ,'FaceColor','texturemap');
 
     % operator
-    PlaceObject('Worker.ply', ...
+    PlantObject('Worker.ply', ...
     [ 2.5+X 0+Y ZLowerAxis]);
-    PlaceObject('Worker.ply', ...
+    PlantObject('Worker.ply', ...
     [ 2.5+X -1+Y ZLowerAxis]);
     
     % fire extinguisher
-    PlaceObject('FireExtinguisherCO2.ply', ...
+    PlantObject('FireExtinguisherCO2.ply', ...
     [ 1.9+X 0.9+Y ZLowerAxis]);
 
     % signs
@@ -189,4 +189,6 @@ function EnvironmentA2()
     ,'FaceColor','texturemap');
     
     axis([XLowerAxis XUpperAxis+X YLowerAxis+Y YUpperAxis+Y ZLowerAxis ZUpperAxis+Z]);
+
+    CollideableMeshes = [t(1); t1(1)];
 end

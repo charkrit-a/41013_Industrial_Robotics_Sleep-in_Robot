@@ -10,7 +10,7 @@
     EnvironmentA2();
     
     % plot robots
-    r1 = Robot(LinearUR10e(transl(-0.3,0,0)), transl(0,0,0.08)*troty(-pi/2));
+    r1 = Robot(LinearUR10e(transl(-0.3,0,0)), transl(0,0,0.08)*troty(-pi/2), [0 0 0 0 0 0 0]);
     r2 = Robot(UR3e(transl(0.5,0.2,0)*trotz(pi/2), true, 'gripper_2fg7_base'), transl(0,0,0.05), [0 -pi/2 pi/2 -pi/2 -pi/2 0]);
 
     % place objects
