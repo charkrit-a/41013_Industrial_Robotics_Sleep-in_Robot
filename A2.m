@@ -37,8 +37,10 @@
         switch state
             case 0 % landing
                 app.StatusLamp.Color = [0 0 0];
+
             case 1 % jogging
                 app.StatusLamp.Color = [0 0 1];
+
             case 2 % breakfast
                 app.StatusLamp.Color = [0 1 0];
                 % example of how to make the robots move
@@ -183,7 +185,6 @@
                         if r1Done
                             brekky = 0; % last step should return to 0
                         end
-
                 end
 
             case 99 % ESTOP
