@@ -30,6 +30,26 @@ classdef Robot < handle
             r.model.animate(q);
         end
 
+        function tr = Fkine(obj, q)
+            %FKINE gets the transform of every joint 
+            if nargin < 2
+                q = obj.qCurrent;
+            end
+            
+            baseTr = obj.r.model.base;
+            L = obj.r.model.links;
+            n = length(L);
+
+            % initialise the 
+            tr = zeros(4,4,n+1);
+
+            % calculate all links using DH parameters
+            tr(:,:,1) = baseTr;
+            for i = 1 : n
+                tr(:,:,i+1) = tr(:,:,i) * trotz(q(i)+L(i).offset) * transl(0,0,L(i).d) * transl(L(i).a,0,0) * trotx(L(i).alpha);
+            end
+        end 
+
         function Teach(obj, q)
             %TEACH animate specific q
             obj.qCurrent = q;
