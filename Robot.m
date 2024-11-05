@@ -17,7 +17,7 @@ classdef Robot < handle
             %ROBOT Construct an instance of this class
             %   Detailed explanation goes here
             if nargin < 4
-                collideables = "none";
+                collideables = [];
             end
             if nargin < 3
                 q = GenerateInitialQ(r);
@@ -58,9 +58,9 @@ classdef Robot < handle
                 end
             end
 
-            for i = 1 : n+1
-                % plot3(tr(1,4,i),tr(2,4,i),tr(3,4,i),'x','MarkerSize',10,'Color','r');
-            end
+            % for i = 1 : n+1
+            %     plot3(tr(1,4,i),tr(2,4,i),tr(3,4,i),'x','MarkerSize',10,'Color','r');
+            % end
         end 
 
         function Teach(obj, q)
@@ -160,7 +160,7 @@ classdef Robot < handle
 
             result = false;
 
-            if all(obj.trTarget == tr) && ~isempty(obj.qTraj)
+            if all(obj.trTarget == tr)
                 result = true;
                 return
             end
@@ -171,21 +171,8 @@ classdef Robot < handle
             obj.qTarget = obj.r.model.ikcon(trWithOffset, qGuess);
             traj = jtraj(obj.qCurrent, obj.qTarget, steps);
 
-            obj.qTraj = [];
-            
-            % check for collisions along this path
-            if obj.collideables ~= "none"
-                for i = 1:size(obj.collideables,1)
-                    for j = 1:size(traj,1)
-                        if obj.DetectCollision(obj.collideables(i), traj(j,:))
-                            return
-                        end
-                    end
-                end
-            end
-
-            result = true;
             obj.qTraj = traj;
+            result = true;
         end
 
         function result = SetTargetQ(obj,q,steps)
@@ -196,7 +183,7 @@ classdef Robot < handle
 
             result = false;
             
-            if all(obj.qTarget == q) && ~isempty(obj.qTraj)
+            if all(obj.qTarget == q)
                 result = true;
                 return
             end
@@ -204,21 +191,9 @@ classdef Robot < handle
             obj.qTarget = q;
             obj.trTarget = obj.r.model.fkine(q);
             traj = jtraj(obj.qCurrent, obj.qTarget, steps);
-            obj.qTraj = [];
-            
-            % check for collisions along this path
-            if obj.collideables ~= "none"
-                for i = 1:size(obj.collideables,1)
-                    for j = 1:size(traj,1)
-                        if obj.DetectCollision(obj.collideables(i), traj(j,:))
-                            return
-                        end
-                    end
-                end
-            end
 
-            result = true;
             obj.qTraj = traj;
+            result = true;
         end
 
         function StepArm(obj)
@@ -227,22 +202,40 @@ classdef Robot < handle
             drawnow;
         end
         
-        function status = Animate(obj,entity,rotation)
+        function result = Animate(obj, additionalCollideables, entity, rotation)
             %ANIMATE Move the robot arm end effector to a pose
             %   Detailed explanation goes here
-            if nargin < 3
+            if nargin < 4
                 rotation = 1;
             end
-            if nargin < 2
+            if nargin < 3
                 entity = "none";
-                rotation = 1;
             end 
+            if nargin < 2
+                additionalCollideables = "none";
+            end
 
-            status = false;
-
+            result = false;
+            
+            % clc
+            % size(obj.qTraj)
             if isempty(obj.qTraj)
-                status = true;
+                result = true;
                 return
+            end
+
+            if additionalCollideables == "none"
+                allCollideables = obj.collideables;
+            else
+                allCollideables = [additionalCollideables, obj.collideables];
+            end
+            
+            % check for collisions along this path
+            for i = 1:size(allCollideables,1)
+                if size(obj.qTraj, 1) >= 10 && ~isempty(obj.qTraj(10,:)) ...
+                && obj.DetectCollision(allCollideables(i), obj.qTraj(10,:))
+                    return
+                end
             end
 
             obj.StepArm();
